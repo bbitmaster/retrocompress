@@ -1,0 +1,28 @@
+WARNING! THIS PROGRAM DOES NOT YET WORK! IT IS EARLY WIP! DO NOT USE IT!
+
+
+This is still very early/unfinished/unsupported. It doesn't work yet and has bugs.
+
+This will eventually be a set of tools to compress and decompress data used by various first party SNES games.
+
+It will use an algorithm similar to COMPRESCH - a tool wrote by disch in 2008. This algorithm is capable
+(assuming it is implemented bug-free) of achieving optimal compression. I don't have any kind of formal proof
+for this, but I know it to be true from my understanding of the algorithm.
+
+
+Current Instructions:
+There is no makefile yet. to compile run:
+gcc snescompress.c -o snescompress
+gcc dekirby.c -o dekirby
+
+if you have a Kirby Adventure NES ROM named kirby.nes then run
+./dekirby kirby.nes out.bin 0x1289d
+to produce a file named out.bin with kirby level 1 decompressed data.
+
+Once this file is produced, you can test the compressor by running
+./snescompress out.bin out_compressed.bin
+
+
+
+
+WARNING! THIS PROGRAM DOES NOT YET WORK! IT IS WIP! DO NOT USE IT!
