@@ -16,8 +16,8 @@ typedef unsigned char uint8;
 
 typedef struct {
     uint8 *data;
-    int size;
-    int maxsize;
+    int offset;
+    int max_size;
 } r_array;
 
 typedef struct {
@@ -127,11 +127,15 @@ int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompre
     int command_count=0;
 
     while(1){
+        int old_offset = br->offset;
+        int old_out_offset = out_array->offset;
+
         int header_byte;
         header_byte = readbyte(br);
+        //0xFF is allowed to be the last byte in the file, anything else can't be.
+        if(header_byte == 0xff)break;
         if(check_eof(br))goto error;
 
-        if(header_byte == 0xff)break;
         int command, length;
 
         command = header_byte >> 5;
@@ -198,7 +202,7 @@ int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompre
                 //data contains an address to copy data from
                 addr = readbyte(br) << 8;
                 if(check_eof(br))goto error;
-                addr = readbyte(br);
+                addr |= readbyte(br);
                 if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr++);
@@ -210,7 +214,7 @@ int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompre
             case 5:
                 addr = readbyte(br) << 8;
                 if(check_eof(br))goto error;
-                addr = readbyte(br);
+                addr |= readbyte(br);
                 if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr++);
@@ -221,7 +225,7 @@ int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompre
             case 6:
                 addr = readbyte(br) << 8;
                 if(check_eof(br))goto error;
-                addr = readbyte(br);
+                addr |= readbyte(br);
                 if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr--);
@@ -237,12 +241,27 @@ int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompre
                 break;
         }
         command_count++;
+
+#ifdef RC_LOG_LEVEL_3
+    int j;
+    printf("Compressed: ");
+    for(i = old_offset;i < br->offset;i++){
+        printf("%02X",br->data[i]);
+    }
+    printf("\n");
+
+    printf("Uncompressed: ");
+    for(j = old_out_offset;j < out_array->offset;j++){
+        printf("%02X",out_array->data[j]);
+    }
+    printf("\n");
+#endif
     }
 
     //get the compressed size
     *compressed_size=br->offset;
 
-    *decompressed_size = out_array->size;
+    *decompressed_size = out_array->offset;
 
 
     //delete the resizable array, saving the data
@@ -294,17 +313,17 @@ int check_eof(byte_reader *br){
 //initiailize a new resizable array
 r_array *init_r_array(){
     r_array *r = (r_array *)malloc(sizeof(r_array));
-    r->size = 0;
-    r->maxsize = 65536;
+    r->offset = 0;
+    r->max_size = 65536;
     r->data = (uint8 *)malloc(65536);
 }
 
 //insert a byte into resizable array
 void insert_byte_r_array(r_array *r,uint8 b){
-    r->data[r->size++] = b;
-    if(r->size == r->maxsize){
-        r->maxsize += 65536;
-        r->data = (uint8 *)realloc((void *)r->data,r->maxsize);
+    r->data[r->offset++] = b;
+    if(r->offset == r->max_size){
+        r->max_size += 65536;
+        r->data = (uint8 *)realloc((void *)r->data,r->max_size);
     }
 }
 

@@ -317,7 +317,7 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         return;
     }
 
-    uint8 *compressed_data = (uint8 *)malloc(p->compressed_size);
+    uint8 *compressed_data = (uint8 *)malloc(p->compressed_size+1);
     compress_node *p_walk=p;;
 
     int node_count=0;
@@ -326,15 +326,15 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         if(type < 0)break;
         int c_size=output_compression[type](tree,p_walk,compressed_data);
 //        printf("c->type %d c->parent->type %d c->c_size %d\n",p_walk->type,p_walk->parent->type,p_walk->compressed_size);
-        
+        printf("type: %d\n",type);        
         printf("Compressed: ");
         for(i = 0;i < c_size;i++){
-            printf("%02X ",compressed_data[p_walk->parent->compressed_size+i]);
+            printf("%02X",compressed_data[p_walk->parent->compressed_size+i]);
         }
 
         printf("\nUncompressed: ");
         for(i = p_walk->parent->uncompressed_size;i < p_walk->uncompressed_size;i++){
-            printf("%02X ",tree->data[i]);
+            printf("%02X",tree->data[i]);
         }
         printf("\n");
 
@@ -346,8 +346,9 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         node_count++;
         p_walk = p_walk->parent;
     }
+    compressed_data[p->compressed_size] = 0xff;
 
-    *compressed_size = p->compressed_size;
+    *compressed_size = p->compressed_size+1;
 
     printf("Optimal compression size: %d Uncompressed size %d\n",p->compressed_size,tree->data_size);
 
@@ -562,7 +563,9 @@ int do_lz_compress(compress_tree *tree, compress_node *node, int *uncompressed_s
             int lz_match=0;
             //check in reverse order
             for(j = 0;j+i > 0;j--){
-                if(tree->data[i+j] == tree->data[max_uncompressed+j]){
+                int k = -j;
+                if(max_uncompressed+k >= maxlen)break; //don't allow writing past end
+                if(tree->data[i+j] == tree->data[max_uncompressed+k]){
                     lz_match++;
                 } else break;
             }
