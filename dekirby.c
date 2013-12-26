@@ -63,7 +63,7 @@ int main(int argc,char *argv[]){
         int command, length;
 
         command = header_byte >> 5;
-        length = header_byte&0x1f + 1;
+        length = (header_byte&0x1f) + 1;
 
         //if this is an extended command (type 111)
         if(command == 7){
@@ -71,7 +71,7 @@ int main(int argc,char *argv[]){
             uint8 header_byte2 = readbyte(infp,&eof_flag);
             if(check_eof(eof_flag))goto error;
             command = (header_byte>>2)&0x07;
-            length = header_byte2 + header_byte&0x03 + 1;
+            length = header_byte2 + ((header_byte&0x03)<<8) + 1;
         }
 
         uint8 b;
@@ -240,13 +240,15 @@ void delete_r_array(r_array *r){
     free(r);
 }
 
+
 uint8 reverse_bits(uint8 b){
     int i;
     uint8 r=0;
     for(i = 0;i < 8;i++){
-        if(b&1)r|=0x80;
-        b<<=1;
-        r>>=1;
+        r<<=1;
+        if(b&1)r|=0x01;
+        b>>=1;
     }
+    return r;
 }
 

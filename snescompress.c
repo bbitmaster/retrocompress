@@ -18,6 +18,7 @@ int main(int argc,char *argv[]){
     printf("reversed bits of 0x03 = %02X\n",reverse_bits(0x03));
     printf("reversed bits of 0xAC = %02X\n",reverse_bits(0xAC));
     printf("reversed bits of 0xCA = %02X\n",reverse_bits(0xCA));
+    printf("reversed bits of 0xFF = %02X\n",reverse_bits(0xFF));
 
     char *infilename, *outfilename;
     infilename = argv[1];
@@ -317,17 +318,30 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
     }
 
     uint8 *compressed_data = (uint8 *)malloc(p->compressed_size);
-    compress_node *p_walk;
+    compress_node *p_walk=p;;
 
     int node_count=0;
     while(p_walk != NULL){
         int type = p_walk->type;
         if(type < 0)break;
         int c_size=output_compression[type](tree,p_walk,compressed_data);
+//        printf("c->type %d c->parent->type %d c->c_size %d\n",p_walk->type,p_walk->parent->type,p_walk->compressed_size);
+        
+        printf("Compressed: ");
+        for(i = 0;i < c_size;i++){
+            printf("%02X ",compressed_data[p_walk->parent->compressed_size+i]);
+        }
+
+        printf("\nUncompressed: ");
+        for(i = p_walk->parent->uncompressed_size;i < p_walk->uncompressed_size;i++){
+            printf("%02X ",tree->data[i]);
+        }
+        printf("\n");
+
         if(c_size != p_walk->compressed_size-p_walk->parent->compressed_size){
             printf("ERROR! Serious Bug Encountered. csize=%d compressed_size=%d parent->compressed_size=%d\n",
             c_size,p_walk->compressed_size,p_walk->parent->compressed_size);
-            return;
+            return compressed_data;
         }
         node_count++;
         p_walk = p_walk->parent;
@@ -367,11 +381,30 @@ int node_size_comparison(const void *p1,const void *p2){
 //              compressed_size and uncompressed_size will be unmodified in this case.
 
 int get_compression_uncompressed(compress_tree *tree, compress_node *node, int *uncompressed_size,int *compressed_size){
-    if(node->type == 0){
-        *compressed_size = node->compressed_size + 1;
-    } else {
-        *compressed_size = node->compressed_size + 2;
+    *compressed_size = node->compressed_size;
+
+    compress_node *p=node;
+    int i=0;
+    while(p != NULL && p->type == 0){
+        i++;
+        p=p->parent;
     }
+    //if there are 31 parents that are all uncompressed, then we will need to account for the extra length byte
+    //that it takes to have an uncompressed block of 
+    if(i == 32)(*compressed_size)++;
+
+    //if there are a multiple of 1024 parents all uncompressed, then we need to start a new block.
+    //This means we need an extra byte.
+    if(i%1024 == 1023)(*compressed_size)++;
+
+    //if parent's type is also uncompressed, then the length is 1 byte larger
+    if(node->type == 0){
+        (*compressed_size)++;
+    } else {
+    //if the parent's type is another type then the lengh is 2 bytes to account for the header
+        (*compressed_size)+=2;
+    }
+
     *uncompressed_size = node->uncompressed_size + 1;
     return 1;
 }
@@ -476,10 +509,11 @@ uint8 reverse_bits(uint8 b){
     int i;
     uint8 r=0;
     for(i = 0;i < 8;i++){
-        if(b&1)r|=0x80;
-        b<<=1;
-        r>>=1;
+        r<<=1;
+        if(b&1)r|=0x01;
+        b>>=1;
     }
+    return r;
 }
 
 int do_lz_compress(compress_tree *tree, compress_node *node, int *uncompressed_size,int *compressed_size,int *lz_location,int *lz_length,int lz_type){
@@ -565,45 +599,44 @@ int do_lz_compress(compress_tree *tree, compress_node *node, int *uncompressed_s
 
 
 int output_compression_uncompressed(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
+
     //walk up the tree until we hit something that ISN'T uncompressed
     //we collapse the tree and remove extra uncompressed elements that are now unnecessary.
     int data_len=0;
     compress_node *p=node;
-    int output_location;
-    while(p!= NULL){
-        data_len++;
-        output_location = p->parent->compressed_size;
-        if(p->parent->type != 0)break;
-        compress_node *p_tmp = p->parent;
-        free(p);
-        p=p_tmp;
-    }
-    data_len--;
 
-    //collapse the tree
-    node->parent = p;
+    while(p->parent != NULL && p->parent->type == 0){
+        data_len++;
+        compress_node *p_tmp = p->parent->parent;
+        free(p->parent);
+        p->parent = p_tmp;
+    }
+    int output_location = p->parent->compressed_size;
 
     int output_size;
     if(data_len < 32){
-        compressed_buf[output_location++] = data_len;
+        compressed_buf[output_location++] = data_len|(type<<5);
         output_size=1;
     }else{
-        compressed_buf[output_location++] = data_len>>8;
-        compressed_buf[output_location++] = data_len&0xFF;
+        compressed_buf[output_location++] = 0xE0 | type<<2 | (data_len)>>8;
+        compressed_buf[output_location++] = (data_len)&0xFF;
         output_size=2;
     }
     int i;
-    int uncompressed_location=node->uncompressed_size-data_len;
-    for(i = 0;i < data_len;i++){
+    int uncompressed_location=node->uncompressed_size-data_len-1;
+
+    for(i = 0;i < data_len+1;i++){
         compressed_buf[output_location++] = tree->data[uncompressed_location++];
     }
 
-    output_size +=data_len;
+    output_size +=data_len+1;
     return output_size;
 
 }
 
 int output_compression_rle(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int uncompressed_location = node->parent->uncompressed_size;
     int output_location = node->parent->compressed_size;
 
@@ -616,10 +649,10 @@ int output_compression_rle(compress_tree *tree, compress_node *node,uint8 *compr
 
     int output_size;
     if(rle_count < 32){
-        compressed_buf[output_location++] = (rle_count)|0x20;
+        compressed_buf[output_location++] = (rle_count)|(type<<5);
         output_size=1;
     } else {
-        compressed_buf[output_location++] = (rle_count>>8)|0x20;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) | (rle_count>>8);
         compressed_buf[output_location++] = rle_count&0xFF;
         output_size=2;
     }
@@ -630,6 +663,7 @@ int output_compression_rle(compress_tree *tree, compress_node *node,uint8 *compr
 }
 
 int output_compression_2byte_rle(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int uncompressed_location = node->parent->uncompressed_size;
     int output_location = node->parent->compressed_size;
 
@@ -643,10 +677,10 @@ int output_compression_2byte_rle(compress_tree *tree, compress_node *node,uint8 
 
     int output_size;
     if(rle_count < 32){
-        compressed_buf[output_location++] = (rle_count)|0x40;
+        compressed_buf[output_location++] = (rle_count)|(type << 5);
         output_size=1;
     } else {
-        compressed_buf[output_location++] = (rle_count>>8)|0x40;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) | (rle_count>>8);
         compressed_buf[output_location++] = rle_count&0xFF;
         output_size=2;
     }
@@ -658,6 +692,7 @@ int output_compression_2byte_rle(compress_tree *tree, compress_node *node,uint8 
 }
 
 int output_compression_rle_increment(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int uncompressed_location = node->parent->uncompressed_size;
     int output_location = node->parent->compressed_size;
 
@@ -670,10 +705,10 @@ int output_compression_rle_increment(compress_tree *tree, compress_node *node,ui
 
     int output_size;
     if(rle_count < 32){
-        compressed_buf[output_location++] = (rle_count)|0x60;
+        compressed_buf[output_location++] = (rle_count)|(type << 5);
         output_size=1;
     } else {
-        compressed_buf[output_location++] = (rle_count>>8)|0x60;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) |(rle_count>>8);
         compressed_buf[output_location++] = rle_count&0xFF;
         output_size=2;
     }
@@ -684,6 +719,7 @@ int output_compression_rle_increment(compress_tree *tree, compress_node *node,ui
 }
 
 int output_compression_lz(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int u_size, c_size, lz_location,lz_length;
     int output_location = node->parent->compressed_size;
 
@@ -693,13 +729,13 @@ int output_compression_lz(compress_tree *tree, compress_node *node,uint8 *compre
     
     int output_size=0;
     if(lz_length < 32){
-        compressed_buf[output_location++] = lz_length|0x80;
+        compressed_buf[output_location++] = lz_length|(type << 5);
         output_size++;
     }
     else {
-        compressed_buf[output_location++] = (lz_length>>8)|0x80;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) | (lz_length>>8);
         compressed_buf[output_location++] = (lz_length)&0xFF;
-        output_size++;
+        output_size+=2;
     }
 
     compressed_buf[output_location++] = (lz_location>>8)&0xFF;
@@ -710,6 +746,7 @@ int output_compression_lz(compress_tree *tree, compress_node *node,uint8 *compre
 }
 
 int output_compression_lz_bitreversed(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int u_size, c_size, lz_location,lz_length;
     int output_location = node->parent->compressed_size;
 
@@ -717,13 +754,13 @@ int output_compression_lz_bitreversed(compress_tree *tree, compress_node *node,u
  
     int output_size=0;
     if(lz_length < 32){
-        compressed_buf[output_location++] = lz_length|0xA0;
+        compressed_buf[output_location++] = lz_length|(type << 5);
         output_size++;
     }
     else {
-        compressed_buf[output_location++] = (lz_length>>8)|0xA0;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) | (lz_length>>8);
         compressed_buf[output_location++] = (lz_length)&0xFF;
-        output_size++;
+        output_size+=2;
     }
 
     compressed_buf[output_location++] = (lz_location>>8)&0xFF;
@@ -734,6 +771,7 @@ int output_compression_lz_bitreversed(compress_tree *tree, compress_node *node,u
 }
 
 int output_compression_lz_reversed(compress_tree *tree, compress_node *node,uint8 *compressed_buf){
+    int type=node->type;
     int u_size, c_size, lz_location,lz_length;
     int output_location = node->parent->compressed_size;
 
@@ -741,13 +779,13 @@ int output_compression_lz_reversed(compress_tree *tree, compress_node *node,uint
  
     int output_size=0;
     if(lz_length < 32){
-        compressed_buf[output_location++] = lz_length|0xC0;
+        compressed_buf[output_location++] = lz_length|(type << 5);
         output_size++;
     }
     else {
-        compressed_buf[output_location++] = (lz_length>>8)|0xC0;
+        compressed_buf[output_location++] = 0xE0 | (type << 2) | (lz_length>>8);
         compressed_buf[output_location++] = (lz_length)&0xFF;
-        output_size++;
+        output_size+=2;
     }
 
     compressed_buf[output_location++] = (lz_location>>8)&0xFF;
