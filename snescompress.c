@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <limits.h>
 
 typedef unsigned char uint8;
 typedef unsigned int uint32;
@@ -200,12 +200,9 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
             p = p->next;
         }
 
-        //if we encountered no leaf nodes, then we are done
-        if(leaf_node_count == 0)
-            break;
 
         //PHASE 2: prune the tree
-        //Step 1: Put pointers to all nodes in an array so we sort them.
+        //Step 1: Put pointers to all nodes in an array so we can sort them.
         compress_node **node_pointer_array = (compress_node **)malloc(sizeof(compress_node *)*(tree->num_nodes));
 
         p = tree->head;
@@ -226,15 +223,19 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         //loop through the array, deleting any nodes that have fallen behind
         compress_node **node_iterator;
         int compressed_size_tracker = (*node_pointer_array)->compressed_size;
+        int uncompressed_size_tracker = (*node_pointer_array)->uncompressed_size;
 
-        for(node_iterator = node_pointer_array+1;node_iterator < (node_pointer_array+tree->num_nodes);node_iterator++){
+        for(node_iterator = (node_pointer_array+1);node_iterator < (node_pointer_array+tree->num_nodes);node_iterator++){
             int c_size = (*node_iterator)->compressed_size;
-                
-            if(c_size >= compressed_size_tracker)
-                (*node_iterator)->status |= STATUS_DELETEME;
-            else
-                compressed_size_tracker = c_size;
+            int u_size = (*node_iterator)->uncompressed_size;
 
+            //type 0 is special... for now don't prune it
+            if((*node_iterator)->type == 0)continue;
+                
+            if(u_size == uncompressed_size_tracker && c_size >= compressed_size_tracker)
+                (*node_iterator)->status |= STATUS_DELETEME;
+            compressed_size_tracker = c_size;
+            uncompressed_size_tracker = u_size;
         }
 
         //node_pointer_array has served it's purpose for now.
@@ -298,27 +299,36 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         }
         printf("leaf_count: %d deleted_count %d total nodes: %d progress: %d\n",
         leaf_node_count,deleted_node_count,tree->num_nodes,progress);
+        
+        //if we encountered no leaf nodes, then we are done
+        if(leaf_node_count == 0)
+            break;
     }
 
     //if we made it here, it means we have a tree with no leaf nodes. One or more optimal
     //compression sequences will be in this tree. Find the first one.
 
     compress_node *p = tree->head;
+    int best_match_size=INT_MAX;
+    compress_node *p_best=NULL;
     while(p != NULL){
         if(p->uncompressed_size == tree->data_size){
-            break;
+            if(best_match_size > p->compressed_size){
+                best_match_size = p->compressed_size;
+                p_best = p;
+            }
         }
         p=p->next;
     }
 
     //this indicates a serious bug in the program, it means that there isn't an optimal p in the tree.
-    if(p == NULL){
+    if(p_best == NULL){
         printf("Serious bug encountered.\n");
         return;
     }
 
-    uint8 *compressed_data = (uint8 *)malloc(p->compressed_size+1);
-    compress_node *p_walk=p;;
+    uint8 *compressed_data = (uint8 *)malloc(p_best->compressed_size+1);
+    compress_node *p_walk=p_best;
 
     int node_count=0;
     while(p_walk != NULL){
@@ -346,11 +356,11 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
         node_count++;
         p_walk = p_walk->parent;
     }
-    compressed_data[p->compressed_size] = 0xff;
+    compressed_data[p_best->compressed_size] = 0xff;
 
-    *compressed_size = p->compressed_size+1;
+    *compressed_size = p_best->compressed_size+1;
 
-    printf("Optimal compression size: %d Uncompressed size %d\n",p->compressed_size,tree->data_size);
+    printf("Optimal compression size: %d Uncompressed size %d\n",p_best->compressed_size,tree->data_size);
 
 
     //TODO: CLEANUP!!!
@@ -364,7 +374,16 @@ int node_size_comparison(const void *p1,const void *p2){
     //sort by uncompressed size in descending order.
     if((*p1_cast)->uncompressed_size < (*p2_cast)->uncompressed_size)
         return 1;
-    else return -1;
+
+    //if uncompressed size is same, sort by compressed size in ascending order
+    if((*p1_cast)->uncompressed_size == (*p2_cast)->uncompressed_size){
+        if((*p1_cast)->compressed_size < (*p2_cast)->compressed_size){
+            return -1;
+        }
+        return 1;
+    }
+
+    return -1;
 }
 
 //get_compression_***() parameters:
@@ -466,7 +485,7 @@ int get_compression_rle_increment(compress_tree *tree, compress_node *node, int 
     int rle_count=0;
     int i;
     for(i = node->uncompressed_size+1;i < tree->data_size;i++){
-        if(tree->data[i] == (tree->data[i-1]-1))rle_count++;
+        if(tree->data[i] == (tree->data[i-1]+1))rle_count++;
         else break;
     }
 
