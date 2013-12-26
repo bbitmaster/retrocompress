@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#define RC_LOG_LEVEL_3
+
+#ifdef RC_LOG_LEVEL_3
+#define RC_LOG_LEVEL_2
+#endif
+
+#ifdef RC_LOG_LEVEL_2
+#define RC_LOG_LEVEL_1
+#endif
+
 typedef unsigned char uint8;
 
 typedef struct {
@@ -9,18 +20,26 @@ typedef struct {
     int maxsize;
 } r_array;
 
-uint8 readbyte(FILE *f,int *eof_flag);
-int check_eof(int eof_flag);
+typedef struct {
+    uint8 *data;
+    int offset;
+    int max_size;
+    int eof_flag;
+} byte_reader;
+
+uint8 readbyte(byte_reader *br);
+int check_eof(byte_reader *br);
+
 r_array *init_r_array();
 void insert_byte_r_array(r_array *r,uint8 b);
 uint8 get_byte_r_array(r_array *r,int index);
-void delete_r_array(r_array *r);
 uint8 reverse_bits(uint8 b);
 
+int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompressed_size,int *compressed_size, int format);
 
 int main(int argc,char *argv[]){
     if(argc < 3){
-        printf("Usage: dekirby <infilename> <outfilename> <offset>\n");
+        printf("Usage: retrouncompress <infilename> <outfilename> <offset>\n");
         printf("\tHexidecimal Offsets must be preceeded by 0x\n");
         printf("\tIf offset is ommited, it is assumed 0\n");
         return 0;
@@ -40,13 +59,66 @@ int main(int argc,char *argv[]){
     
     //open the input file pointer
     FILE *infp = fopen(infilename,"rb");
-    if(offset != 0)fseek(infp,offset,SEEK_SET);
+    if(infp == NULL){
+        printf("Error: Opening Input File.\n");
+        return 1;
+    }
+
+    //find end of file
+    fseek(infp,0,SEEK_END);
+    int file_size = ftell(infp);
+
+    if(offset > file_size){
+        printf("Error: Offset beyond end of file.\n");
+        return 1;
+    }
+    //lazily read entire file into memory...
+    fseek(infp,0,SEEK_SET);
+    uint8 *data=(uint8 *)malloc(file_size);
+    fread(data,file_size,1,infp);
+
+    int decompressed_size, compressed_size;
+    printf("offset %x, %02x\n\n",offset,*(data+offset));
+    uint8 *decompressed_data;
+    int status = decompress(data+offset,&decompressed_data,file_size-offset,&decompressed_size,&compressed_size,0);
+    
+    fclose(infp);
+    
+    if(status != 1){
+        printf("Decompression Error... Aborting...\n");
+        free(data);
+        return 1;
+    }
+
+
+    printf("Compressed Data Size: %d\n",compressed_size);
+    printf("Decompressed Data Size: %d\n",decompressed_size);
+
+    //write outputdata to file
+    FILE *outfp = fopen(outfilename,"wb");
+    if(outfp == NULL){
+        printf("Error: Opening Output File.\n");
+        return 1;
+    }
+
+    fwrite(decompressed_data,decompressed_size,1,outfp);
+    fclose(outfp);
+
+    free(decompressed_data);
+    free(data);
+}
+
+int decompress(uint8 *data,uint8 **decompressed_data, int max_size,int *decompressed_size,int *compressed_size, int format){
+
+    byte_reader *br = (byte_reader *)malloc(sizeof(byte_reader));
+    
+    br->data = data;
+    br->max_size = max_size;
+    br->offset = 0;
+    br->eof_flag = 0;
 
     //init the resiziable array for our output
     r_array *out_array = init_r_array();
-
-    //define error flag
-    int eof_flag=0;
     
     int i;
 
@@ -55,24 +127,28 @@ int main(int argc,char *argv[]){
     int command_count=0;
 
     while(1){
-        uint8 header_byte;
-        header_byte = readbyte(infp,&eof_flag);
-        if(check_eof(eof_flag))goto error;
+        int header_byte;
+        header_byte = readbyte(br);
+        if(check_eof(br))goto error;
 
         if(header_byte == 0xff)break;
         int command, length;
 
         command = header_byte >> 5;
         length = (header_byte&0x1f) + 1;
-
+        
         //if this is an extended command (type 111)
         if(command == 7){
             //get command and length from 2 byte header
-            uint8 header_byte2 = readbyte(infp,&eof_flag);
-            if(check_eof(eof_flag))goto error;
+            int header_byte2 = readbyte(br);
+            if(check_eof(br))goto error;
             command = (header_byte>>2)&0x07;
             length = header_byte2 + ((header_byte&0x03)<<8) + 1;
         }
+
+#ifdef RC_LOG_LEVEL_2
+        printf("header_byte %02x command %d length %d\n",header_byte,command,length);
+#endif
 
         uint8 b;
         uint8 b2;
@@ -81,25 +157,25 @@ int main(int argc,char *argv[]){
             case 0:
                 //copy input to output
                 for(i = 0;i < length;i++){
-                    b = readbyte(infp,&eof_flag);
-                    if(check_eof(eof_flag))goto error;
+                    b = readbyte(br);
+                    if(check_eof(br))goto error;
                     insert_byte_r_array(out_array,b);
                 }
                 commands_used[0]++;
                 break;
             case 1:
-                b = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                b = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     insert_byte_r_array(out_array,b);
                 }
                 commands_used[1]++;
                 break;
             case 2:
-                b = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
-                b2 = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                b = readbyte(br);
+                if(check_eof(br))goto error;
+                b2 = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     insert_byte_r_array(out_array,b);
                     insert_byte_r_array(out_array,b2);
@@ -107,8 +183,8 @@ int main(int argc,char *argv[]){
                 commands_used[2]++;
                 break;
             case 3:
-                b = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                b = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     insert_byte_r_array(out_array,b);
                     b++;
@@ -120,10 +196,10 @@ int main(int argc,char *argv[]){
             case 4:
             case 7:
                 //data contains an address to copy data from
-                addr = readbyte(infp,&eof_flag) << 8;
-                if(check_eof(eof_flag))goto error;
-                addr = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                addr = readbyte(br) << 8;
+                if(check_eof(br))goto error;
+                addr = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr++);
                     insert_byte_r_array(out_array,b);
@@ -132,10 +208,10 @@ int main(int argc,char *argv[]){
                 break;
 
             case 5:
-                addr = readbyte(infp,&eof_flag) << 8;
-                if(check_eof(eof_flag))goto error;
-                addr = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                addr = readbyte(br) << 8;
+                if(check_eof(br))goto error;
+                addr = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr++);
                     insert_byte_r_array(out_array,reverse_bits(b));
@@ -143,14 +219,16 @@ int main(int argc,char *argv[]){
                 commands_used[5]++;
                 break;
             case 6:
-                addr = readbyte(infp,&eof_flag) << 8;
-                if(check_eof(eof_flag))goto error;
-                addr = readbyte(infp,&eof_flag);
-                if(check_eof(eof_flag))goto error;
+                addr = readbyte(br) << 8;
+                if(check_eof(br))goto error;
+                addr = readbyte(br);
+                if(check_eof(br))goto error;
                 for(i = 0;i < length;i++){
                     b = get_byte_r_array(out_array,addr--);
                     if(addr < 0){
+#ifdef RC_LOG_LEVEL_1
                         printf("Decompression Error: Compression type 6 moved below beginning of input stream\n");
+#endif
                         goto error;
                     }
                     insert_byte_r_array(out_array,b);
@@ -160,51 +238,51 @@ int main(int argc,char *argv[]){
         }
         command_count++;
     }
-    //can't break out of multiple blocks in C
-    error:;
 
     //get the compressed size
-    int compressed_size=ftell(infp) - offset;
+    *compressed_size=br->offset;
 
-    int decompressed_size = out_array->size;
+    *decompressed_size = out_array->size;
 
-    //close the input file
-    fclose(infp);
 
-    //write data to file
-    FILE *outfp = fopen(outfilename,"wb");
-    for(i = 0;i < out_array->size;i++){
-        fputc(out_array->data[i],outfp);
-    }
-    fclose(outfp);
+    //delete the resizable array, saving the data
+    *decompressed_data = out_array->data;
 
-    //delete the resizable array
-    delete_r_array(out_array);
+    free(out_array);
+    free(br);
 
+#ifdef RC_LOG_LEVEL_1
     printf("Decompression Finished... some stats: \n");
     printf("-Compression Header Command Used Count-\n");
     printf("0\t1\t2\t3\t4\t5\t6\n");
     printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\n",commands_used[0],commands_used[1],commands_used[2]
         ,commands_used[3],commands_used[4],commands_used[5],commands_used[6]);
     printf("total blocks: %d\n",command_count);
-    printf("compressed size: %d\n",compressed_size);
-    printf("decompressed size: %d\n",decompressed_size);
+    printf("compressed size: %d\n",*compressed_size);
+    printf("decompressed size: %d\n",*decompressed_size);
+#endif
+
+    return 1;
+
+    error:;
+
+    return 0;
 }
 
-uint8 readbyte(FILE *f,int *eof_flag){
-    int b = fgetc(f);
-    if(b == EOF){
-        *eof_flag = 1;
-    }
-    return (uint8)b;
+uint8 readbyte(byte_reader *br){
+    uint8 b = br->data[br->offset++];
+
+    return b;
 }
 
 //This error checking function ensures the end of file hasn't been
 //reached before it is supposed to.
-int check_eof(int eof_flag){
+int check_eof(byte_reader *br){
     //check eof flag... this indicates error
-    if(eof_flag == 1){
-        printf("Decompression Error: EOF Reached. Aborting.\n");
+    if(br->offset >= br->max_size){
+#ifdef RC_LOG_LEVEL_1
+        printf("Decompression Error: max_size reached. Aborting.\n");
+#endif
         return 1;
     }
     return 0;
@@ -233,11 +311,6 @@ void insert_byte_r_array(r_array *r,uint8 b){
 //get a byte from a resizable array
 uint8 get_byte_r_array(r_array *r,int index){
     return r->data[index];
-}
-
-void delete_r_array(r_array *r){
-    free(r->data);
-    free(r);
 }
 
 
