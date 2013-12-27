@@ -14,12 +14,6 @@ int main(int argc,char *argv[]){
         return 0;
     }
 
-    printf("reversed bits of 0x30 = %02X\n",reverse_bits(0x30));
-    printf("reversed bits of 0x03 = %02X\n",reverse_bits(0x03));
-    printf("reversed bits of 0xAC = %02X\n",reverse_bits(0xAC));
-    printf("reversed bits of 0xCA = %02X\n",reverse_bits(0xCA));
-    printf("reversed bits of 0xFF = %02X\n",reverse_bits(0xFF));
-
     char *infilename, *outfilename;
     infilename = argv[1];
 
@@ -229,11 +223,14 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
             int c_size = (*node_iterator)->compressed_size;
             int u_size = (*node_iterator)->uncompressed_size;
 
-            //type 0 is special... for now don't prune it
-            if((*node_iterator)->type == 0)continue;
+            //type 0 is special... It is possible that we could be gaining an extra byte with that type.
+            //Assume that it may be saving an extra byte when doing the prune test.
+            int compressed_compare_size = c_size;
+            if((*node_iterator)->type == 0)compressed_compare_size--;
                 
-            if(u_size == uncompressed_size_tracker && c_size >= compressed_size_tracker)
+            if(u_size == uncompressed_size_tracker && compressed_compare_size >= compressed_size_tracker)
                 (*node_iterator)->status |= STATUS_DELETEME;
+            
             compressed_size_tracker = c_size;
             uncompressed_size_tracker = u_size;
         }
@@ -360,7 +357,7 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
 
     *compressed_size = p_best->compressed_size+1;
 
-    printf("Optimal compression size: %d Uncompressed size %d\n",p_best->compressed_size,tree->data_size);
+    printf("Optimal compression size: %d Uncompressed size %d\n",*compressed_size,tree->data_size);
 
 
     //TODO: CLEANUP!!!
@@ -370,14 +367,23 @@ uint8 *snes_compress(uint8 *data,int data_size, int *compressed_size){
 int node_size_comparison(const void *p1,const void *p2){
     compress_node **p1_cast = (compress_node **)p1;
     compress_node **p2_cast = (compress_node **)p2;
+    int p1_uncompressed = (*p1_cast)->uncompressed_size;
+    int p1_compressed = (*p1_cast)->compressed_size;
+    int p2_uncompressed = (*p2_cast)->uncompressed_size;
+    int p2_compressed = (*p2_cast)->compressed_size;
+
+    //Type 0 is special case. It is possible that we could be gaining an extra byte with that type.
+    //Do the sort assuming that we are.
+    if((*p1_cast)->type == 0)p1_compressed--;
+    if((*p2_cast)->type == 0)p2_compressed--;
 
     //sort by uncompressed size in descending order.
-    if((*p1_cast)->uncompressed_size < (*p2_cast)->uncompressed_size)
+    if(p1_uncompressed < p2_uncompressed)
         return 1;
 
     //if uncompressed size is same, sort by compressed size in ascending order
-    if((*p1_cast)->uncompressed_size == (*p2_cast)->uncompressed_size){
-        if((*p1_cast)->compressed_size < (*p2_cast)->compressed_size){
+    if(p1_uncompressed == p2_uncompressed){
+        if(p1_compressed < p2_compressed){
             return -1;
         }
         return 1;
