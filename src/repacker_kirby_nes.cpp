@@ -237,17 +237,21 @@ static void recompress_all(std::vector<Blob>& blobs) {
 
 // ---------------- Packing ----------------
 
-struct BankPlan {
+// A "run" is a contiguous sequence of blobs where each starts exactly where
+// the previous ended. We must pack only within runs — any byte between runs
+// belongs to non-blob data (code, palettes, other tables) and must not be
+// touched.
+struct Run {
     int bank;
-    std::vector<Blob*> blobs;     // sorted by original offset (== sorted by table-index within type)
+    std::vector<Blob*> blobs;
     int orig_first_off;
-    int orig_last_end;            // exclusive
-    int new_end;                  // exclusive (after packing)
-    int saved;                    // bytes freed
+    int orig_last_end;
+    int new_end;            // exclusive
+    int saved;
 };
 
-static std::vector<BankPlan> plan_packing(std::vector<Blob>& blobs) {
-    // Group MAP/TILESET/TABLE_* by bank for packing. INLINE stays in place.
+static std::vector<Run> plan_packing(std::vector<Blob>& blobs) {
+    // Group MAP/TILESET/TABLE_* by bank. INLINE stays in place.
     std::map<int, std::vector<Blob*>> by_bank;
     for (Blob& b : blobs) {
         if (b.kind == Blob::INLINE) {
@@ -257,28 +261,51 @@ static std::vector<BankPlan> plan_packing(std::vector<Blob>& blobs) {
         by_bank[b.bank].push_back(&b);
     }
 
-    std::vector<BankPlan> plans;
+    std::vector<Run> runs;
     for (auto& kv : by_bank) {
-        BankPlan p;
-        p.bank = kv.first;
-        p.blobs = kv.second;
-        std::sort(p.blobs.begin(), p.blobs.end(),
+        auto& vec = kv.second;
+        std::sort(vec.begin(), vec.end(),
                   [](Blob* a, Blob* b) { return a->orig_file_off < b->orig_file_off; });
 
-        p.orig_first_off = p.blobs.front()->orig_file_off;
-        p.orig_last_end = p.blobs.back()->orig_file_off + p.blobs.back()->orig_csz;
+        // Split into runs at any gap between consecutive blobs.
+        Run cur;
+        cur.bank = kv.first;
+        for (size_t i = 0; i < vec.size(); ++i) {
+            Blob* b = vec[i];
+            if (cur.blobs.empty()) {
+                cur.blobs.push_back(b);
+                cur.orig_first_off = b->orig_file_off;
+                cur.orig_last_end = b->orig_file_off + b->orig_csz;
+            } else {
+                if (b->orig_file_off == cur.orig_last_end) {
+                    cur.blobs.push_back(b);
+                    cur.orig_last_end = b->orig_file_off + b->orig_csz;
+                } else {
+                    // Gap — close current run, start a new one.
+                    runs.push_back(cur);
+                    cur = Run{};
+                    cur.bank = kv.first;
+                    cur.blobs.push_back(b);
+                    cur.orig_first_off = b->orig_file_off;
+                    cur.orig_last_end = b->orig_file_off + b->orig_csz;
+                }
+            }
+        }
+        if (!cur.blobs.empty()) runs.push_back(cur);
+    }
 
-        int cursor = p.orig_first_off;
-        for (Blob* b : p.blobs) {
+    // Assign new offsets within each run.
+    for (Run& r : runs) {
+        int cursor = r.orig_first_off;
+        for (Blob* b : r.blobs) {
             b->new_file_off = cursor;
             cursor += (int)b->rec.size();
         }
-        p.new_end = cursor;
-        p.saved = p.orig_last_end - p.new_end;
-        if (p.saved < 0) p.saved = 0;
-        plans.push_back(std::move(p));
+        r.new_end = cursor;
+        r.saved = r.orig_last_end - r.new_end;
+        if (r.saved < 0) r.saved = 0;
     }
-    return plans;
+    return runs;
 }
 
 // ---------------- Output writing & patching ----------------
@@ -286,17 +313,15 @@ static std::vector<BankPlan> plan_packing(std::vector<Blob>& blobs) {
 static void write_output(const std::vector<u8>& rom_in,
                          std::vector<u8>& rom_out,
                          std::vector<Blob>& blobs,
-                         const std::vector<BankPlan>& plans) {
+                         const std::vector<Run>& runs) {
     rom_out = rom_in;
 
     // 1. Write each blob's recompressed bytes at its new location.
-    //    For packed groups, also fill any freed bytes inside the original
-    //    blob range with $FF.
-    for (const BankPlan& p : plans) {
-        // Fill the entire original range with $FF first.
-        for (int i = p.orig_first_off; i < p.orig_last_end; ++i) rom_out[i] = 0xFF;
-        // Then write each new blob.
-        for (Blob* b : p.blobs) {
+    //    Fill ONLY the run's original range with $FF first — never the gaps
+    //    between runs (those contain code/other data we must preserve).
+    for (const Run& r : runs) {
+        for (int i = r.orig_first_off; i < r.orig_last_end; ++i) rom_out[i] = 0xFF;
+        for (Blob* b : r.blobs) {
             memcpy(&rom_out[b->new_file_off], b->rec.data(), b->rec.size());
         }
     }
@@ -379,11 +404,11 @@ static bool verify_roundtrip(const std::vector<u8>& rom_out,
 // ---------------- Free-space report ----------------
 
 struct FreeRange { int file_off; int len; int bank; };
-static std::vector<FreeRange> compute_free_space(const std::vector<BankPlan>& plans) {
+static std::vector<FreeRange> compute_free_space(const std::vector<Run>& runs) {
     std::vector<FreeRange> ranges;
-    for (const BankPlan& p : plans) {
-        if (p.new_end < p.orig_last_end) {
-            ranges.push_back({p.new_end, p.orig_last_end - p.new_end, p.bank});
+    for (const Run& r : runs) {
+        if (r.new_end < r.orig_last_end) {
+            ranges.push_back({r.new_end, r.orig_last_end - r.new_end, r.bank});
         }
     }
     return ranges;
@@ -428,8 +453,8 @@ int main(int argc, char** argv) {
     // 2. Recompress
     recompress_all(blobs);
 
-    // 3. Pack
-    auto plans = plan_packing(blobs);
+    // 3. Pack (within contiguous "runs" of blobs — never crossing a gap)
+    auto runs = plan_packing(blobs);
 
     // 4. Stats
     long total_orig = 0, total_new = 0;
@@ -461,7 +486,7 @@ int main(int argc, char** argv) {
         return 0;
     }
     std::vector<u8> rom_out;
-    write_output(rom, rom_out, blobs, plans);
+    write_output(rom, rom_out, blobs, runs);
     FILE* of = fopen(out_path, "wb");
     if (!of) { perror(out_path); return 1; }
     fwrite(rom_out.data(), 1, rom_out.size(), of);
@@ -481,7 +506,7 @@ int main(int argc, char** argv) {
 
     // 7. Free-space report
     if (verbose) {
-        auto ranges = compute_free_space(plans);
+        auto ranges = compute_free_space(runs);
         long total_free = 0;
         for (auto& r : ranges) total_free += r.len;
         printf("\n=== Free space ranges (after packing within each bank) ===\n");
