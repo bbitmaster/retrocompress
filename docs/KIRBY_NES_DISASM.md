@@ -201,6 +201,45 @@ compressed data.
   recompresses each, places them back (respecting MMC3 bank boundaries),
   and updates the corresponding pointer-table entries and inline immediates.
 
+## Map blob payload structure (after decompression)
+
+Empirical findings from `tools/dump_map.py` on map index 0 (Vegetable
+Valley world map — the first room loaded from a save). Compressed bytes
+live at file `0xF6B0` (bank 7, CPU `$B6A0`), 617 bytes → **986 bytes
+decompressed**, destination `$67EE`.
+
+The decompressed payload appears to be:
+
+- **Header**, roughly 26 bytes, starting with bytes like
+  `02 02 28 47 9A 30 22 00 00 01 02 03 …` followed by a run of zeros.
+- **Grid of metatile codes**, 16 cells per row × 60 rows = 960 bytes,
+  total `26 + 960 = 986`. When viewed at width 16, sky and gap rows
+  appear as runs of zeros and recognizable map detail clusters into
+  three vertically-separated "screens" of data.
+
+The byte at offset 0 of the header is overwritten with `#$05` by the
+post-decomp routine at bank 19 `$A38C`, so the decomp output is treated
+as scratch RAM, not as final nametable data. The actual nametable is
+synthesized by `$A38C+` from the grid via metatile and attribute lookups
+that depend on the active tileset (see TILESET tables at file `0x249FD /
+0x24A2E / 0x24A5F`).
+
+To render directly from ROM (no trace) we still need:
+
+1. The mapping from map index → tileset index (where in ROM is this
+   stored? likely via `$055E` / world-state indexing in bank 56).
+2. Decompression of the corresponding tileset blob (a TILESET-table
+   entry), which contains the **metatile definition table** — each
+   metatile expands to 4 tile indices + an attribute group bits.
+3. The 32×30 nametable assembly routine starting at bank 19 `$A38C`
+   (partially disassembled; computes per-screen metatile offsets and
+   pushes 4 tile bytes per metatile to VRAM).
+
+`tools/dump_map.py` extracts the raw decompressed bytes for any of the
+327 maps (use `--map N` or `--bank/--addr`) and prints a 16-wide hex
+view. See `tools/render_first_room.py` for the trace-driven render that
+serves as ground truth for the eventual ROM-only renderer.
+
 ## JSR $C43A call site summary
 
 | Kind | Count | Coverage |
