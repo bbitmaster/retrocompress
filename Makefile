@@ -12,7 +12,7 @@ CSFLAGS = -O2 -std=c++11 -Wno-write-strings -Wno-narrowing -I$(COMPRESCH_DIR)
 
 CS_OBJS = blocklist.o block_lzbitrev.o compresch_kirby.o compresch_stdblock.o crunchtree.o
 
-CORE_BINS = test_basic walker_kirby_nes walker_super_metroid jsr_tracer_kirby
+CORE_BINS = test_basic walker_kirby_nes walker_super_metroid jsr_tracer_kirby repacker_kirby_nes
 COMP_BINS = bench diff_one scanner
 
 # Auto-extract compresch from the vendored zip at Makefile parse time if not
@@ -43,6 +43,9 @@ walker_super_metroid: src/walker_super_metroid.cpp retrocompress.o
 	$(CXX) $(CXXFLAGS) -Isrc -o $@ $^
 
 jsr_tracer_kirby: src/jsr_tracer_kirby.cpp retrocompress.o
+	$(CXX) $(CXXFLAGS) -Isrc -o $@ $^
+
+repacker_kirby_nes: src/repacker_kirby_nes.cpp retrocompress.o
 	$(CXX) $(CXXFLAGS) -Isrc -o $@ $^
 
 bench: src/bench.cpp retrocompress.o $(CS_OBJS)

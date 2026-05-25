@@ -4,6 +4,7 @@ test_basic
 walker_kirby_nes
 walker_super_metroid
 jsr_tracer_kirby
+repacker_kirby_nes
 bench
 diff_one
 scanner

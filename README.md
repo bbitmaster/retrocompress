@@ -33,7 +33,7 @@ compressed blocks.
 
 | Game | Decoder | Optimal encoder | Pointer-table walker |
 |---|---|---|---|
-| Kirby's Adventure (NES) | yes | yes | yes — 361 blocks, 4.00% smaller than original |
+| Kirby's Adventure (NES) | yes | yes | yes — 427 blobs inventoried, full repacker (`repacker_kirby_nes`) produces a verified valid ROM with all pointer tables updated, 5.7 KB / 3.9% saved |
 | Super Metroid (SNES) | yes | not yet | tilesets only (87/87 decode) |
 | Other family members | reachable | not yet | not yet |
 
@@ -62,9 +62,14 @@ make COMPRESCH_DIR=/path/to/your/compresch/src
 ## Running
 
 ```sh
-./test_basic                                           # unit tests
-./walker_kirby_nes path/to/kirby.nes                  # Kirby NES analysis
-./walker_super_metroid path/to/super_metroid.smc      # SM analysis
+./test_basic                                                 # unit tests
+./walker_kirby_nes path/to/kirby.nes                         # Kirby NES analysis
+./walker_super_metroid path/to/super_metroid.smc             # SM analysis
+
+# The full Kirby NES repacker — reads a ROM, recompresses every blob with
+# retrocompress, repacks within each PRG bank, patches all pointer tables
+# and inline immediates, and writes an output ROM that plays identically.
+./repacker_kirby_nes path/to/kirby.nes -o kirby_repacked.nes --verify --verbose
 ```
 
 ## History
