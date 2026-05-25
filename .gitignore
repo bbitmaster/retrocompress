@@ -1,0 +1,16 @@
+# Build artifacts
+*.o
+test_basic
+walker_kirby_nes
+walker_super_metroid
+bench
+diff_one
+scanner
+
+# Auto-extracted vendored compresch
+third_party/compresch/extracted/
+
+# Local notes / experiments
+/tmp/
+*.bin
+*.swp
