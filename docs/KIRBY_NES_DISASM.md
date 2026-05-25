@@ -147,12 +147,57 @@ loaded one-at-a-time.
 | INLINE single-shot calls | 13 | NEW — bank resolution still needed |
 | **Total identified compressed blobs** | **~427** | |
 
+## INLINE call sites — resolved via the same-bank rule
+
+Empirically, **Kirby's inline JSR sites always have their source data in
+the same PRG bank as the calling code.** This is the "code-and-data
+co-located" pattern: when control enters bank N, both R6 (code at $8000)
+and R7 (data at $A000) are set to bank N. The inline call then reads
+compressed data from R7 = same bank as the code currently executing.
+
+All 13 inline call sites resolve cleanly with this rule:
+
+| JSR offset | bank | src CPU | file_off | dec_sz | csz |
+|---|---|---|---|---|---|
+| 0x5C655 | 46 | $A691 | 0x5C6A1 | 1024 | 301 |
+| 0x5C67D | 46 | $A7BE | 0x5C7CE | 1024 | 429 |
+| 0x6C7B4 | 54 | $A85E | 0x6C86E | 1024 | 559 |
+| 0x6CDD0 | 54 | $B10B | 0x6D11B | 3072 | 713 |
+| 0x7656E | 59 | $A881 | 0x76891 | 1024 | 320 |
+| 0x765C5 | 59 | $A9C1 | 0x769D1 | 1024 | 446 |
+| 0x77360 | 59 | $BA82 | 0x77A92 | 1024 | 332 |
+| 0x773B1 | 59 | $BBCE | 0x77BDE | 2048 | 853 |
+| 0x781E9 | 60 | $A2C2 | 0x782D2 | 1024 | 316 |
+| 0x78204 | 60 | $A7C9 | 0x787D9 | 2048 | 515 |
+| 0x7823B | 60 | $A50B | 0x7851B | 1024 | 396 |
+| 0x7A3AD | 61 | $AAE3 | 0x7AAF3 | 1024 | 106 |
+| 0x7A3DC | 61 | $AB4D | 0x7AB5D | 1024 | 568 |
+
+Total: 17,408 bytes decompressed from 5,854 bytes compressed
+(ratio 0.336). All blobs are 1024 / 2048 / 3072 byte multiples — exactly
+matches CHR tile-page sizes (1 page = 1024 bytes = 64 8×8 tiles).
+
+## Final inventory
+
+| Source | Count | Compressed bytes | Decompressed bytes |
+|---|---|---|---|
+| TCRF-documented maps + tilesets | 361 | 135,561 | 288,246 |
+| TABLE_Y_2 `$AC28/$AC30` (bank 52) | 8 | 3,692 | 9,216 |
+| TABLE_Y_2 `$B531/$B55E` (bank 19, Y=1..45) | 45 | ~1,354 | ~5,756 |
+| INLINE same-bank | 13 | 5,854 | 17,408 |
+| **Total** | **~427** | **~146,461** | **~320,626** |
+
+So Kirby's Adventure has roughly **427 compressed blobs totaling ~146 KB
+compressed / ~320 KB decompressed** — about 19% of the 786 KB ROM is
+compressed data.
+
 ## Still pending
 
-- **13 INLINE call sites** — bank is set by an ancestor caller. Requires
-  cross-function call-graph tracing (find JSRs to each containing function,
-  inspect each caller for `LDA #imm / JSR $F052` patterns).
-- **Repacker** — once all blobs are inventoried, write a tool that
+- **5 COMPLEX call sites** — these all route through the map/asset loader
+  at `$E640` or one of its variants. They cover the 361 already-documented
+  blobs via the parallel-array pointer tables. Already inventoried via
+  `pointer_walker_kirby_nes`.
+- **Repacker** — once all blobs are inventoried (DONE), write a tool that
   recompresses each, places them back (respecting MMC3 bank boundaries),
   and updates the corresponding pointer-table entries and inline immediates.
 

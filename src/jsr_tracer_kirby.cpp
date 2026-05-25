@@ -43,7 +43,6 @@
 #include <cstring>
 #include <vector>
 #include <set>
-#include <algorithm>
 #include "retrocompress.h"
 
 using u8 = unsigned char;
@@ -133,42 +132,50 @@ static BankResolved resolve_src_bank(const std::vector<u8>& rom, int src_cpu) {
     return best;
 }
 
+// Resolve a bank by trying a specific value: returns valid struct or {-1,...}.
+static BankResolved try_bank(const std::vector<u8>& rom, int src_cpu, int bank) {
+    if (src_cpu < 0xA000 || src_cpu > 0xBFFF || bank < 0 || bank >= 64) return {-1,-1,0,0,false};
+    int file_off = 0x10 + bank * 0x2000 + (src_cpu - 0xA000);
+    if (file_off + 4 > (int)rom.size()) return {-1,-1,0,0,false};
+    int dec_sz = Retrocompress::decompress(&rom[file_off], (int)rom.size() - file_off, nullptr);
+    if (dec_sz <= 0) return {-1,-1,0,0,false};
+    // measure orig csz
+    int p = 0, rs = (int)rom.size();
+    bool ok = false;
+    while (file_off + p < rs) {
+        u8 ctrl = rom[file_off + p++];
+        if (ctrl == 0xFF) { ok = true; break; }
+        int cmd = ctrl >> 5, ln;
+        if (cmd == 7) {
+            if (file_off + p >= rs) break;
+            ln = (((ctrl & 3) << 8) | rom[file_off + p++]) + 1;
+            cmd = (ctrl >> 2) & 7;
+        } else ln = (ctrl & 0x1F) + 1;
+        if (cmd == 7) cmd = 4;
+        if (cmd == 0) p += ln;
+        else if (cmd == 1 || cmd == 3) p += 1;
+        else p += 2;
+    }
+    if (!ok) return {-1,-1,0,0,false};
+    return {bank, file_off, dec_sz, p, false};
+}
+
 // Combined resolver: prefer the bank from a found `LDA #imm / JSR $F052`
-// pattern; fall back to brute-force if none found or if the directly-named
-// bank doesn't actually produce a valid stream.
+// pattern; fall back to "same bank as calling code" (Kirby's typical R6==R7
+// pattern for code-with-inline-data), then to brute-force.
 static BankResolved resolve_src_bank_with_setup(const std::vector<u8>& rom,
                                                 int src_cpu, int jsr_off) {
+    // 1. Try the bank from a found `LDA #imm / JSR $F052` pattern.
     int hinted = find_bank_setup(rom, jsr_off, 512);
     if (hinted >= 0) {
-        int bank = hinted & 0x7F; // observed pattern: top bit is an engine flag
-        if (src_cpu >= 0xA000 && src_cpu <= 0xBFFF && bank < 64) {
-            int file_off = 0x10 + bank * 0x2000 + (src_cpu - 0xA000);
-            if (file_off + 4 <= (int)rom.size()) {
-                int dec_sz = Retrocompress::decompress(&rom[file_off],
-                                                       (int)rom.size() - file_off, nullptr);
-                if (dec_sz > 0) {
-                    // Measure original csz
-                    int p = 0, rs = (int)rom.size();
-                    bool ok = false;
-                    while (file_off + p < rs) {
-                        u8 ctrl = rom[file_off + p++];
-                        if (ctrl == 0xFF) { ok = true; break; }
-                        int cmd = ctrl >> 5, ln;
-                        if (cmd == 7) {
-                            if (file_off + p >= rs) break;
-                            ln = (((ctrl & 3) << 8) | rom[file_off + p++]) + 1;
-                            cmd = (ctrl >> 2) & 7;
-                        } else ln = (ctrl & 0x1F) + 1;
-                        if (cmd == 7) cmd = 4;
-                        if (cmd == 0) p += ln;
-                        else if (cmd == 1 || cmd == 3) p += 1;
-                        else p += 2;
-                    }
-                    if (ok) return {bank, file_off, dec_sz, p, true};
-                }
-            }
-        }
+        auto r = try_bank(rom, src_cpu, hinted & 0x7F);
+        if (r.bank >= 0) { r.from_setup = true; return r; }
     }
+    // 2. Kirby pattern: code-and-data co-located, bank = bank containing the JSR.
+    int call_bank = (jsr_off - 0x10) / 0x2000;
+    auto r2 = try_bank(rom, src_cpu, call_bank);
+    if (r2.bank >= 0) return r2;
+    // 3. Brute-force fallback.
     return resolve_src_bank(rom, src_cpu);
 }
 
@@ -324,7 +331,7 @@ int main(int argc, char** argv) {
             if (r.bank >= 0) {
                 printf("  0x%-7X  %s  src=$%04X  dst=$%04X  -> bank=%2d %s file=0x%-6X  orig_csz=%-5d dec_sz=%d\n",
                        cs.file_off, k, cs.src_cpu, cs.dst_cpu, r.bank,
-                       r.from_setup ? "(from F052)" : "(heuristic) ",
+                       r.from_setup ? "(F052 hint)" : "(same-bank)",
                        r.file_off, r.orig_csz, r.dec_sz);
                 total_new_orig += r.orig_csz;
                 total_new_dec += r.dec_sz;
