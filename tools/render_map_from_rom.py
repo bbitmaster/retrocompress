@@ -64,28 +64,55 @@ def derive_chr_banks(rom, map_idx, map_data):
     R5 = rom[CHR_R5_TBL_FILE + hdr2]
     return (R0, R1, R2, R3, R4, R5)
 
-# Palette source data lives at per-map pointers (PAL_BANK_TBL=$24A90,
-# PAL_PTR_HI_TBL=$24BD7, PAL_PTR_LO_TBL=$24D1E). The byte layout starts
-# with [count, type] but the rest is encoded — fades into $6000..$601F
-# over multiple frames via the loop at $1F:C175. Unpacker not yet RE'd.
+# Per-map palette derivation — RE'd 2026-05-25 from $09:A6BA + $09:A600
+# (see docs/KIRBY_NES_DISASM.md "Per-map palette derivation"). The 32-byte
+# BG palette is built from a mix of byte tables in PRG chunk $00 and a
+# sub6/sub7 table in PRG chunk $12, indexed by map header bytes [3] and [5].
 #
-# Until then: PALETTE_BY_TILESET maps each of the 29 tilesets to a
-# representative palette (captured from a trace when available, else
-# a heuristic fallback). Maps sharing a tileset don't always share a
-# palette in the real game — this is an approximation that still
-# produces plausible color, and individual maps can be overridden via
-# --palette.
-PALETTE_BY_TILESET = {
-    # ts 7 = Vegetable Valley stage 1 — captured from kirb_door1.log @ f3042
-    7:  '213720 2A 212A1909 212A1A0F 21372707 2135250F 21303717 21362617 2120250F'.replace(' ',''),
-    # ts 21 = Vegetable Valley world map — captured from FCEUX trace
-    21: '203121122039290920392921203727072035250F2030371720202C0F2037280F',
-}
-# Generic fallback when the tileset has no captured palette: a
-# neutral blue-sky + brown-ground that at least makes the geometry
-# visible. Sub-palettes 0..7 share BG $0F (black) and use varied
-# earth-tone secondaries.
-PALETTE_FALLBACK = '0F302717 0F300F30 0F302717 0F303030 0F271707 0F302717 0F302717 0F300F30'.replace(' ', '')
+# Position layout in the 32-byte palette:
+#   [0]/[4]/[8]/[C]/[10]/[14]/[18]/[1C] = universal BG color  (BG_TBL[header[3]])
+#   sub0 (positions 1,2,3) = SUB_TBL[i+1..3 of 0..9][header[3]]
+#   sub1 (positions 5,6,7) = SUB_TBL[i+4..6][header[3]]
+#   sub2 (positions 9,A,B) = SUB_TBL[i+7..9][header[3]]
+#   sub3 (positions D,E,F) = hardcoded $37,$27,$07 (with overrides for maps $9A-$A2 and $11)
+#   sub4 (positions 11,12,13) = $35,$25,$0F  (default carry-over from earlier palette)
+#   sub5 (positions 15,16,17) = hardcoded $30,$37,$17 (set at $09:A605..A611)
+#   sub6 (positions 19,1A,1B) = SUB67_TBL[header[5]*6 .. +2]
+#   sub7 (positions 1D,1E,1F) = SUB67_TBL[header[5]*6+3 .. +5]
+PAL_BG_AND_SUB012_BASE = 0x10       # 10 tables at $8000+i*$100 in PRG chunk 0
+PAL_SUB67_TBL          = 0x24E65    # 6-byte entries indexed by header[5], in chunk $12
+
+# Maps that get the sub3 = $20,$10,$00 override (map list at $A766, all submap 0)
+SUB3_OVERRIDE_LIST_1 = set(range(0x9A, 0xA3))   # maps $9A..$A2
+
+def derive_palette(rom, map_idx, map_data):
+    h3 = map_data[3]  # palette-table index for BG + sub0/1/2
+    h5 = map_data[5]  # palette-table index for sub6/sub7
+    pal = bytearray(32)
+    # BG (universal background) — written to all 8 sub-palette start slots
+    bg = rom[PAL_BG_AND_SUB012_BASE + h3]
+    for slot in (0, 4, 8, 0xC, 0x10, 0x14, 0x18, 0x1C):
+        pal[slot] = bg
+    # sub0, sub1, sub2 — 9 sequential tables at $8100..$8900
+    for i, slot in enumerate((1, 2, 3, 5, 6, 7, 9, 0xA, 0xB)):
+        pal[slot] = rom[PAL_BG_AND_SUB012_BASE + (i+1)*0x100 + h3]
+    # sub3 — default + overrides
+    if map_idx in SUB3_OVERRIDE_LIST_1:
+        pal[0xD], pal[0xE], pal[0xF] = 0x20, 0x10, 0x00
+    elif map_idx == 0x11:
+        # only when submap == 0; we render with sub == 0, so apply
+        pal[0xD], pal[0xE], pal[0xF] = 0x0F, 0x00, 0x20
+    else:
+        pal[0xD], pal[0xE], pal[0xF] = 0x37, 0x27, 0x07
+    # sub4 — carry-over default
+    pal[0x11], pal[0x12], pal[0x13] = 0x35, 0x25, 0x0F
+    # sub5 — hardcoded for stages (would differ for boss/sub-map paths not yet handled)
+    pal[0x15], pal[0x16], pal[0x17] = 0x30, 0x37, 0x17
+    # sub6/sub7 — from SUB67 table indexed by header[5]
+    src = PAL_SUB67_TBL + h5 * 6
+    pal[0x19], pal[0x1A], pal[0x1B] = rom[src], rom[src+1], rom[src+2]
+    pal[0x1D], pal[0x1E], pal[0x1F] = rom[src+3], rom[src+4], rom[src+5]
+    return bytes(pal)
 
 def main():
     ap = argparse.ArgumentParser()
@@ -139,16 +166,14 @@ def main():
         chr_source = f'derived from map header[2]=${map_data[2]:02X} header[4]=${map_data[4]:02X}'
     print(f'CHR banks (R0..R5): {" ".join(f"${b:02X}" for b in chr_banks)}  ({chr_source})')
 
-    # Palette: --palette CLI > captured PALETTE_BY_TILESET[ts] > fallback.
+    # Palette: --palette CLI > derived per-map from ROM
     if args.palette:
         pal_hex = args.palette
         pal_source = 'cli-override'
-    elif ts_idx in PALETTE_BY_TILESET:
-        pal_hex = PALETTE_BY_TILESET[ts_idx]
-        pal_source = f'captured for tileset {ts_idx}'
     else:
-        pal_hex = PALETTE_FALLBACK
-        pal_source = 'fallback (tileset palette not yet captured)'
+        pal_bytes = derive_palette(rom, m, map_data)
+        pal_hex = pal_bytes.hex().upper()
+        pal_source = f'derived from header[3]=${map_data[3]:02X} header[5]=${map_data[5]:02X}'
     print(f'Palette: {pal_hex}  ({pal_source})')
 
     # 3) Tileset layout (confirmed by reverse-engineering the unpacker
