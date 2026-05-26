@@ -64,17 +64,28 @@ def derive_chr_banks(rom, map_idx, map_data):
     R5 = rom[CHR_R5_TBL_FILE + hdr2]
     return (R0, R1, R2, R3, R4, R5)
 
-# Per-map palette captured from FCEUX traces. The per-map source pointer
-# (PAL_BANK / PAL_PTR_HI / PAL_PTR_LO tables) is known but the data is
-# encoded; until the unpacker is reimplemented in Python these manual
-# captures fill the gap.
-PALETTE_DEFAULTS = {
-    # map 0 — Vegetable Valley world map (tileset 21 via header[2]=$28)
-    0: '203121122039290920392921203727072035250F2030371720202C0F2037280F',
-    # map 43 — Vegetable Valley Stage 1-1 (tileset 7 via header[2]=$07)
-    # Captured from kirb_door1.log @ frame 3042 (post-load, screen unblanked)
-    43: '21372020 212A1909 212A1A0F 21372707 2135250F 21303717 21362617 2120250F'.replace(' ',''),
+# Palette source data lives at per-map pointers (PAL_BANK_TBL=$24A90,
+# PAL_PTR_HI_TBL=$24BD7, PAL_PTR_LO_TBL=$24D1E). The byte layout starts
+# with [count, type] but the rest is encoded — fades into $6000..$601F
+# over multiple frames via the loop at $1F:C175. Unpacker not yet RE'd.
+#
+# Until then: PALETTE_BY_TILESET maps each of the 29 tilesets to a
+# representative palette (captured from a trace when available, else
+# a heuristic fallback). Maps sharing a tileset don't always share a
+# palette in the real game — this is an approximation that still
+# produces plausible color, and individual maps can be overridden via
+# --palette.
+PALETTE_BY_TILESET = {
+    # ts 7 = Vegetable Valley stage 1 — captured from kirb_door1.log @ f3042
+    7:  '213720 2A 212A1909 212A1A0F 21372707 2135250F 21303717 21362617 2120250F'.replace(' ',''),
+    # ts 21 = Vegetable Valley world map — captured from FCEUX trace
+    21: '203121122039290920392921203727072035250F2030371720202C0F2037280F',
 }
+# Generic fallback when the tileset has no captured palette: a
+# neutral blue-sky + brown-ground that at least makes the geometry
+# visible. Sub-palettes 0..7 share BG $0F (black) and use varied
+# earth-tone secondaries.
+PALETTE_FALLBACK = '0F302717 0F300F30 0F302717 0F303030 0F271707 0F302717 0F302717 0F300F30'.replace(' ', '')
 
 def main():
     ap = argparse.ArgumentParser()
@@ -128,12 +139,17 @@ def main():
         chr_source = f'derived from map header[2]=${map_data[2]:02X} header[4]=${map_data[4]:02X}'
     print(f'CHR banks (R0..R5): {" ".join(f"${b:02X}" for b in chr_banks)}  ({chr_source})')
 
-    # Palette: --palette CLI > captured PALETTE_DEFAULTS[map] > error.
-    pal_hex = args.palette or PALETTE_DEFAULTS.get(m)
-    if pal_hex is None:
-        print(f'ERROR: no palette captured for map {m}; pass --palette HEX32 to render.')
-        sys.exit(2)
-    print(f'Palette: {pal_hex}')
+    # Palette: --palette CLI > captured PALETTE_BY_TILESET[ts] > fallback.
+    if args.palette:
+        pal_hex = args.palette
+        pal_source = 'cli-override'
+    elif ts_idx in PALETTE_BY_TILESET:
+        pal_hex = PALETTE_BY_TILESET[ts_idx]
+        pal_source = f'captured for tileset {ts_idx}'
+    else:
+        pal_hex = PALETTE_FALLBACK
+        pal_source = 'fallback (tileset palette not yet captured)'
+    print(f'Palette: {pal_hex}  ({pal_source})')
 
     # 3) Tileset layout (confirmed by reverse-engineering the unpacker
     # at $1C:AD04..AD16 (tile tables) and $1C:AD2C..AD56 (palette table)):
