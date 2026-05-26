@@ -220,10 +220,15 @@ Offset  218..end (N*192 bytes): N physical screens, each 16 cols x 12 rows ROW-M
 
 | Byte | Meaning |
 |---|---|
-| `[0]`     | Sequence length — number of scroll-slots the player walks through |
-| `[1..6]`  | Misc metadata; `[5]` ≈ start position (needs more verification) |
-| `[7]`     | Screen height in metatile rows (`$0C` = 12 for horizontal stages) |
-| `[8..N]`  | Sequence table: physical screen IDs in play order. Map 43 has `00 01 02 03` (linear); allows reuse / non-linear arrangements |
+| `[0]`     | Screens **horizontally** (W) — e.g. `$04` for stage 1 (4 screens wide), `$02` for the Vegetable Valley world map |
+| `[1]`     | Screens **vertically** (H) — `$01` for purely horizontal stages, `$02` for the 2×2 world map (`$00` is treated as 1) |
+| `[2]`     | CHR config index — indexes `$9418/$9518/$9618` tables to set R3/R4/R5 |
+| `[3]`     | sub-config (sprite-palette setup at `$09:A6CA` reads it via `LDY $67F1`) |
+| `[4]`     | R1 sprite CHR bank for stage maps (`map_idx >= 8`) — read at `$09:A600..A603` |
+| `[5]`     | approx start position (needs more verification) |
+| `[6]`     | misc |
+| `[7]`     | Screen height override (`$0C` = 12 rows; `$00` falls back to default 12) |
+| `[8..N]`  | Sequence table: `W*H` entries giving the physical screen ID at each grid slot. Layout row-major: `seq_idx = row_slot * W + col_slot`. Map 43 = `00 01 02 03` (4×1). Map 0 (overworld) = `00 01 02 03` (2×2). Allows screen reuse |
 | `[26..217]` | Padding so screen data starts at WRAM `$68C8` (`$67EE + $DA`). Engine hardcodes this via base-pointer tables at file `$7ED55`/`$7ED65` |
 
 ### Per-screen format
@@ -300,6 +305,96 @@ Map 43 → tileset 7 (Vegetable Valley Stage 1-1).
   traces.
 - `tools/render_first_room.py` — trace-driven render that serves as
   ground-truth reference.
+
+## Per-map CHR bank & palette setup (verified 2026-05-25)
+
+When a map loads, two distinct paths set up the 6 CHR bank registers
+R0..R5 (zero-page shadow at `$0042..$0047`) and the 32-byte BG palette
+(WRAM `$6000..$601F`).
+
+### CHR bank resolution
+
+| Reg | Source | Notes |
+|---|---|---|
+| R0 (`$42`) | `#$80` constant | Sprite CHR low. Effectively always `$80` for gameplay |
+| R1 (`$43`) | **map < 8**: `#$D8` hardcoded at `$1C:A01B/A01D` (overworld/menu)<br>**map >= 8**: `header[4]` via `$09:A600..A603` (`LDA $67F2; STA $43`) | Sprite CHR mid |
+| R2 (`$44`) | `#$00` (forced to 0 if map >= 7) at `$09:A6B4/A6B6` | BG CHR 1st 1KB |
+| R3 (`$45`) | `R3_TBL[header[2]]` at `$09:A6B8` (`LDA $9418,Y` with Y=`$67F0`) | BG CHR 2nd 1KB |
+| R4 (`$46`) | `R4_TBL[header[2]]` at `$09:A6BD` (`LDA $9518,Y`) | BG CHR 3rd 1KB |
+| R5 (`$47`) | `R5_TBL[header[2]]` at `$09:A6C2` (`LDA $9618,Y`); animated runtime | BG CHR 4th 1KB |
+
+The R3/R4/R5 tables live in **R6 = chunk `$05`** (set by `JSR $F02C` with
+A=`$05` at `$09:A6A0`). File offsets:
+
+| Table | CPU | File |
+|---|---|---|
+| `R3_TBL` (BG CHR mid) | `$9418` | `$B428` |
+| `R4_TBL` (BG CHR mid-high) | `$9518` | `$B528` |
+| `R5_TBL` (BG CHR high, animated) | `$9618` | `$B628` |
+
+49+ entries each. Indexed by `header[2]` of the map. Verified entries:
+`table[7]` = `(0E, 0F, 1C)` (stage 1 base, R5 animates `$1C`→`$1F`),
+`table[40]` = `(F0, F1, FD)` (Vegetable Valley world map).
+
+### Per-map palette pointer table
+
+At `$09:A656..A66C` (stage map case):
+
+```
+A656  LDY $055E      ; Y = map index
+A659  LDA $055F      ; sub-map flag
+A65C  BNE $A66D      ; sub-map path -> $8B80/$8E0E/$8CC7 tables
+A65E  LDA $8A80,Y    ; bank   = PAL_BANK_TBL[map]    -> $057D
+A664  LDA $8D0E,Y    ; src_lo = PAL_PTR_LO_TBL[map]  -> $16
+A667  LDX $8BC7,Y    ; src_hi = PAL_PTR_HI_TBL[map]  -> $17 (via $A669)
+```
+
+Tables live in R6 = chunk `$12` (set by some prior bank switch).
+File offsets:
+
+| Table | CPU | File |
+|---|---|---|
+| `PAL_BANK_TBL` (main map path) | `$8A80` | `$24A90` |
+| `PAL_PTR_HI_TBL` | `$8BC7` | `$24BD7` |
+| `PAL_PTR_LO_TBL` | `$8D0E` | `$24D1E` |
+| `SUB_PAL_BANK_TBL` (sub-map path) | `$8B80` | (sub-map cases) |
+| `SUB_PAL_PTR_HI_TBL` | `$8CC7` | |
+| `SUB_PAL_PTR_LO_TBL` | `$8E0E` | |
+
+For map 43: bank=`$11`, ptr=`$A63F`. Bytes at `$11:A63F` start with
+`$04` (= 4 palette frames), then encoded payload (NOT a raw 32-byte
+palette — there's an unpacker at `$1F:E684+` that interprets it and
+writes the final 32 bytes into WRAM `$6000..$601F`).
+
+Once unpacked, the BG palette gets written to PPU `$3F00` by the loop
+at `$1F:C282..C2AC`:
+
+```
+C282  LDA #$3F / STA $2006
+C287  LDA #$00 / STA $2006   ; PPU = $3F00
+C28E  LDA $6000 / STA $2007  ; universal BG color (always written)
+C294  LDA $6001,Y / STA $2007
+C29A  LDA $6002,Y / STA $2007
+C2A0  LDA $6003,Y / STA $2007
+       INY * 4, CPY #$20, loop
+```
+
+### Practical render path (ROM-only)
+
+For any stage map N (no trace needed for CHR setup):
+
+1. Decompress map → read header bytes 2 and 4.
+2. R0 = `$80`; R1 = (`$D8` if N < 8) else `header[4]`; R2 = `$00`.
+3. R3 = rom[`$B428` + header[2]]; R4 = rom[`$B528` + header[2]]; R5 = rom[`$B628` + header[2]].
+4. Palette: still requires implementing the unpacker (or use a captured per-tileset palette for known cases).
+
+### Universal sprite palette block
+
+In addition to BG, sprite palette bytes are written to `$0182..$019E`
+via the routine following `STA $45/46/47` — these are the OAM `attr`
+byte slots and get further refined by `STA $0197=$30; STA $0198=$37;
+STA $0199=$17` etc. immediately after the R1 write. Not currently
+relevant for static map rendering.
 
 ## JSR $C43A call site summary
 
