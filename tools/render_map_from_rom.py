@@ -44,17 +44,40 @@ def chr_bank_offset(bank_byte, granularity_kb):
         return (bank_byte & 0xFE) * 1024
     return bank_byte * 1024
 
+# Known-good CHR bank + palette per tileset, captured from FCEUX traces.
+# Keys are tileset indices (0..48). To expand: run the level in FCEUX,
+# capture a trace, and read off MMC3 R0..R5 + active palette.
+TILESET_DEFAULTS = {
+    # Tileset 21 = Vegetable Valley world map (map 0).
+    # From trace line 2700000.
+    21: {
+        'chr': (0xD0, 0xD8, 0x00, 0xF0, 0xF1, 0xFD),
+        'palette': '203121122039290920392921203727072035250F2030371720202C0F2037280F',
+    },
+    # Tileset 7 = Vegetable Valley stage 1 (map 43).
+    # R0/R1 = $82/$9A (sprite CHR pair from L5.5M), R2-R5 = $00 $0E $0F $1F
+    # (BG CHR quad during playfield rendering). Default BG pattern table
+    # is $1000 so R2..R5 drive the visuals.
+    7: {
+        'chr': (0x82, 0x9A, 0x00, 0x0E, 0x0F, 0x1F),
+        'palette': '2137202A212A1909212A1A0F2137270721352F0F2130371721262E0F2127280F',
+    },
+}
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('rom')
     ap.add_argument('map_index', type=lambda x: int(x, 0))
-    ap.add_argument('--chr', nargs=6, type=lambda x: int(x, 0), required=True,
-                    help='MMC3 R0..R5 (CHR banks). R0/R1 are 2KB each, R2-R5 are 1KB each.')
-    ap.add_argument('--palette', type=str, required=True,
-                    help='32 hex bytes (no spaces). The 32-byte PPU palette.')
+    ap.add_argument('--chr', nargs=6, type=lambda x: int(x, 0),
+                    help='MMC3 R0..R5 (CHR banks). R0/R1 are 2KB each, R2-R5 are 1KB each. '
+                         'Overrides the tileset default.')
+    ap.add_argument('--palette', type=str,
+                    help='32 hex bytes (no spaces). Overrides the tileset default.')
     ap.add_argument('--out', required=True)
-    ap.add_argument('--layout', choices=['row','col'], default='col',
-                    help='Row-major (16-wide rows) or column-major (16-tall cols). default: col')
+    ap.add_argument('--layout', choices=['sequence','physical'], default='sequence',
+                    help='sequence: follow the screen-sequence table at decomp[8..] (default — '
+                         'the order the player walks through); '
+                         'physical: show physical screens in storage order')
     ap.add_argument('--scale', type=int, default=2)
     ap.add_argument('--pt-base', type=lambda x: int(x, 0), default=0x1000,
                     help='Pattern table base (0x0000 or 0x1000). default: 0x1000')
@@ -84,44 +107,86 @@ def main():
     ts_data, _ = decompress(rom, ts_fo)
     print(f'Tileset {ts_idx}: {len(ts_data)} bytes from file ${ts_fo:X}')
 
-    # 3) Hypothesis: bytes 0..1023 of tileset = 256 metatiles, 4 bytes each (TL, TR, BL, BR).
-    # Try several orderings later if this doesn't match.
+    # 2a) Resolve CHR banks and palette from known defaults, or args
+    defaults = TILESET_DEFAULTS.get(ts_idx, {})
+    chr_banks = args.chr or defaults.get('chr')
+    pal_hex = args.palette or defaults.get('palette')
+    if chr_banks is None or pal_hex is None:
+        print(f'ERROR: no CHR/palette defaults for tileset {ts_idx}; pass --chr and --palette.')
+        sys.exit(2)
+    print(f'CHR banks (R0..R5): {" ".join(f"${b:02X}" for b in chr_banks)}')
+    print(f'Palette: {pal_hex}')
+
+    # 3) Tileset layout (confirmed by reverse-engineering the unpacker
+    # at $1C:AD04..AD16 (tile tables) and $1C:AD2C..AD56 (palette table)):
+    #   bytes 0..1023     = 256 metatiles, 4 tile indices each (TL, TR, BL, BR)
+    #                       unpacked to RAM $7A00 (TL), $7B00 (TR), $7C00 (BL), $7D00 (BR)
+    #   bytes 1024..1087  = 64 bytes of packed 2-bit palette indices, MSB-FIRST:
+    #                       mt = 4*Y + k where k=0 uses bits 6-7, k=1 bits 4-5,
+    #                       k=2 bits 2-3, k=3 bits 0-1. Unpacked to $7E00.
+    #   bytes 1088..1343  = 256 bytes of metatile collision/property flags
     def metatile_tiles(mt_idx):
-        # ord: TL, TR, BL, BR -- to be confirmed
         base = mt_idx * 4
         return ts_data[base:base+4]
+    def metatile_palette(mt_idx):
+        b = ts_data[1024 + (mt_idx >> 2)]
+        # MSB-first: mt 0 within a byte is bits 6-7, mt 3 is bits 0-1
+        shift = (3 - (mt_idx & 3)) * 2
+        return (b >> shift) & 0x03
 
-    # 4) Build a 60 x 16 metatile grid from map bytes 26..985.
-    HEADER = 26
+    # 4) True format (RE'd from disasm of $09:8190 column-fill +
+    # $1F:EBAB row-pointer setup, plus direct inspection of byte values):
+    #
+    #   Header: 218 bytes (NOT 26 — bytes 26..217 are padding so the
+    #   screen-storage region starts at WRAM $68C8). Within the header,
+    #   bytes 8..N hold the screen-sequence table — indices into the
+    #   physical screen storage. Map 43 has '00 01 02 03' (linear).
+    #
+    #   Screens: each is 192 bytes = 16 metatile-cols x 12 metatile-rows,
+    #   ROW-MAJOR. data[r*16 + c]. byte[7] = $0C = 12 = SCREEN HEIGHT in
+    #   metatile-rows. $EBAB computes ptr = base[screen_id] + (row*16) so
+    #   row*16 indexing matches what the engine does at runtime.
+    #
+    #   Sanity check for map 43: row 9 = all $58, row 10 = $30/$20 checker,
+    #   row 11 = all $28 — classic ground-edge / brick / dirt layout
+    #   visible only under row-major interpretation.
+    HEADER = 218
+    SCREEN_H = map_data[7] if map_data[7] else 12   # byte 7 = screen HEIGHT (12 for horizontal stages)
+    SCREEN_W = 16   # always 16 metatile cols per screen (one nametable wide)
+    SCREEN_BYTES = SCREEN_W * SCREEN_H  # 192 for the common case
     grid_bytes = map_data[HEADER:]
-    if args.layout == 'row':
-        # 60 rows of 16 cells. Visual width = 16 metatiles, height = 60.
-        cols, rows = 16, 60
-        def at(c, r): return grid_bytes[r * cols + c]
-    else:
-        # Column-major in memory: bytes 0..15 = column 0, etc. Visual width = 60 metatiles
-        # (4 screens wide-ish), height = 16 metatiles.
-        cols, rows = 60, 16
-        def at(c, r): return grid_bytes[c * 16 + r]
+    physical_screens = len(grid_bytes) // SCREEN_BYTES
+    SCREENS = map_data[0]  # byte 0 = sequence length
+    print(f'Physical screens stored: {physical_screens}, sequence length (byte 0): {SCREENS}')
+    print(f'Screen height (byte 7): {SCREEN_H} metatile rows; width assumed {SCREEN_W} cols')
+    print(f'Sequence: ' + ' '.join(f'{map_data[8+i]:02X}' for i in range(SCREENS)))
+    # Each screen: 16 cols x 12 rows row-major, 192 bytes.
+    # screen_data[col, row] = grid_bytes[screen_id * 192 + row * 16 + col]
+    cols, rows = SCREEN_W * SCREENS, SCREEN_H
+    def at(c, r):
+        slot = c // SCREEN_W
+        local_c = c % SCREEN_W
+        screen_id = map_data[8 + slot] if args.layout != 'physical' else slot
+        return grid_bytes[screen_id * SCREEN_BYTES + r * SCREEN_W + local_c]
 
     print(f'Rendering as {cols} x {rows} metatiles ({cols*2} x {rows*2} tiles, {cols*16} x {rows*16} px)')
 
-    # 5) Tile-index grid (each metatile -> 4 tiles in a 2x2 quad)
+    # 5) Tile-index grid + per-tile palette index (each metatile -> 4 tiles in a 2x2 quad)
     tile_cols = cols * 2
     tile_rows = rows * 2
     tile_grid = bytearray(tile_cols * tile_rows)
+    pal_grid  = bytearray(tile_cols * tile_rows)
     for r in range(rows):
         for c in range(cols):
             mt = at(c, r)
             t = metatile_tiles(mt)
-            # TL, TR, BL, BR
-            tile_grid[(r*2)   * tile_cols + (c*2)  ] = t[0]
-            tile_grid[(r*2)   * tile_cols + (c*2)+1] = t[1]
-            tile_grid[(r*2+1) * tile_cols + (c*2)  ] = t[2]
-            tile_grid[(r*2+1) * tile_cols + (c*2)+1] = t[3]
+            p = metatile_palette(mt)
+            for sub_idx, (sy, sx) in enumerate([(0,0),(0,1),(1,0),(1,1)]):
+                tile_grid[(r*2+sy) * tile_cols + (c*2+sx)] = t[sub_idx]
+                pal_grid [(r*2+sy) * tile_cols + (c*2+sx)] = p
 
     # 6) CHR window
-    R = args.chr
+    R = chr_banks
     chr_map = bytearray(0x2000)
     chr_map[0x0000:0x0800] = chr_rom[chr_bank_offset(R[0],2):chr_bank_offset(R[0],2)+0x800]
     chr_map[0x0800:0x1000] = chr_rom[chr_bank_offset(R[1],2):chr_bank_offset(R[1],2)+0x800]
@@ -131,12 +196,12 @@ def main():
     chr_map[0x1C00:0x2000] = chr_rom[chr_bank_offset(R[5],1):chr_bank_offset(R[5],1)+0x400]
 
     # 7) Palette
-    pal_hex = args.palette.replace(' ', '').replace(',', '')
+    pal_hex = pal_hex.replace(' ', '').replace(',', '')
     palette = bytes.fromhex(pal_hex)
     if len(palette) != 32:
         print(f'WARNING: palette is {len(palette)} bytes, expected 32')
 
-    # 8) Render — without attribute information yet, just use BG palette 0 for everything.
+    # 8) Render using per-metatile attribute (BG palette index 0..3)
     pt_base = args.pt_base
     W = tile_cols * 8
     H = tile_rows * 8
@@ -144,6 +209,7 @@ def main():
     for ty in range(tile_rows):
         for tx in range(tile_cols):
             tile_idx = tile_grid[ty*tile_cols + tx]
+            pal_idx  = pal_grid [ty*tile_cols + tx]
             t_off = pt_base + tile_idx * 16
             plane0 = chr_map[t_off:t_off+8]
             plane1 = chr_map[t_off+8:t_off+16]
@@ -152,7 +218,7 @@ def main():
                 for col in range(8):
                     bit = 7 - col
                     c = ((p0 >> bit) & 1) | (((p1 >> bit) & 1) << 1)
-                    pal_byte = palette[0] if c == 0 else palette[c]
+                    pal_byte = palette[0] if c == 0 else palette[pal_idx*4 + c]
                     r, g, b = NES_PALETTE[pal_byte & 0x3F]
                     px = (ty*8 + row)*W + (tx*8 + col)
                     img[px*3] = r; img[px*3+1] = g; img[px*3+2] = b

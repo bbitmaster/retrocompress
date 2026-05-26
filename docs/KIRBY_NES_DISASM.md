@@ -201,44 +201,105 @@ compressed data.
   recompresses each, places them back (respecting MMC3 bank boundaries),
   and updates the corresponding pointer-table entries and inline immediates.
 
-## Map blob payload structure (after decompression)
+## Map blob payload structure (after decompression) — VERIFIED
 
-Empirical findings from `tools/dump_map.py` on map index 0 (Vegetable
-Valley world map — the first room loaded from a save). Compressed bytes
-live at file `0xF6B0` (bank 7, CPU `$B6A0`), 617 bytes → **986 bytes
-decompressed**, destination `$67EE`.
+Verified by `tools/dump_map.py` + disassembly of the column-pointer
+routine `$1F:EBAB` and column-fill loop `$09:8190`, plus direct
+inspection of the byte values (row-major signature: a uniform ground
+row + brick checker row + uniform dirt row at the bottom of every
+screen).
 
-The decompressed payload appears to be:
+Decompressed payload (typical size 986 bytes for a 4-screen map):
 
-- **Header**, roughly 26 bytes, starting with bytes like
-  `02 02 28 47 9A 30 22 00 00 01 02 03 …` followed by a run of zeros.
-- **Grid of metatile codes**, 16 cells per row × 60 rows = 960 bytes,
-  total `26 + 960 = 986`. When viewed at width 16, sky and gap rows
-  appear as runs of zeros and recognizable map detail clusters into
-  three vertically-separated "screens" of data.
+```
+Offset  0..217   (218 bytes)  : HEADER  (padded to land screen data at WRAM $68C8)
+Offset  218..end (N*192 bytes): N physical screens, each 16 cols x 12 rows ROW-MAJOR
+```
 
-The byte at offset 0 of the header is overwritten with `#$05` by the
-post-decomp routine at bank 19 `$A38C`, so the decomp output is treated
-as scratch RAM, not as final nametable data. The actual nametable is
-synthesized by `$A38C+` from the grid via metatile and attribute lookups
-that depend on the active tileset (see TILESET tables at file `0x249FD /
-0x24A2E / 0x24A5F`).
+### Header fields
 
-To render directly from ROM (no trace) we still need:
+| Byte | Meaning |
+|---|---|
+| `[0]`     | Sequence length — number of scroll-slots the player walks through |
+| `[1..6]`  | Misc metadata; `[5]` ≈ start position (needs more verification) |
+| `[7]`     | Screen height in metatile rows (`$0C` = 12 for horizontal stages) |
+| `[8..N]`  | Sequence table: physical screen IDs in play order. Map 43 has `00 01 02 03` (linear); allows reuse / non-linear arrangements |
+| `[26..217]` | Padding so screen data starts at WRAM `$68C8` (`$67EE + $DA`). Engine hardcodes this via base-pointer tables at file `$7ED55`/`$7ED65` |
 
-1. The mapping from map index → tileset index (where in ROM is this
-   stored? likely via `$055E` / world-state indexing in bank 56).
-2. Decompression of the corresponding tileset blob (a TILESET-table
-   entry), which contains the **metatile definition table** — each
-   metatile expands to 4 tile indices + an attribute group bits.
-3. The 32×30 nametable assembly routine starting at bank 19 `$A38C`
-   (partially disassembled; computes per-screen metatile offsets and
-   pushes 4 tile bytes per metatile to VRAM).
+### Per-screen format
 
-`tools/dump_map.py` extracts the raw decompressed bytes for any of the
-327 maps (use `--map N` or `--bank/--addr`) and prints a 16-wide hex
-view. See `tools/render_first_room.py` for the trace-driven render that
-serves as ground truth for the eventual ROM-only renderer.
+Each screen is **192 bytes = 16 metatile-cols × 12 metatile-rows, ROW-MAJOR**:
+
+```
+screen[col, row] = decomp[218 + screen_id*192 + row*16 + col]
+```
+
+Width 16 metatiles = 256 px = one NES nametable width. Height 12
+metatiles = 192 px = playfield area below the 16 px HUD. Adjacent
+screens stitch seamlessly in sequence order — ground line, walls and
+patterns line up across screen boundaries because the data IS the
+contiguous level, just chopped into 16-wide blocks.
+
+### Engine indexing (`$1F:EBAB` and `$09:8190`)
+
+```
+EBAB  LDY $67F6,X          ; Y = screen_id = sequence_table[X] (X = scroll slot)
+EBAE  AND #$F0             ; A from caller = row*16 (low nibble is sub-row scroll)
+EBB0  CLC
+EBB1  ADC $ED55,Y          ; ptr_lo = base_lo[screen_id] + row*16
+EBB4  STA $16              ; src_lo
+EBB6  LDA $ED65,Y
+EBB9  ADC #$00
+EBBB  STA $17              ; src_hi
+EBBD  RTS
+```
+
+Then `$09:8190` reads 16 contiguous bytes via `LDA ($16),Y` for Y=0..15
+— that's one full row of 16 cols. The "16 metatiles" the loop consumes
+per pass is a ROW, not a column. (Earlier sessions misread this as
+column-major; the byte values clinched it: row 9 of screen 0 in map
+43 is all `$58`, row 10 is the brick checker `$30/$20`, row 11 is all
+`$28` dirt — uniform horizontal lines, the unmistakable signature of
+row-major.)
+
+Base-pointer tables for screen-id → WRAM offset live at:
+
+| Table | CPU | File |
+|---|---|---|
+| `BASE_LO[screen_id]` | `$ED55` | `$7ED55` |
+| `BASE_HI[screen_id]` | `$ED65` | `$7ED65` |
+
+16 entries, spacing `$C0` = 192 bytes/screen.
+
+### Map → tileset lookup
+
+`MAP_TILESET_TBL @ file $24628` (bank 18 = R6, CPU `$8618`). 327 bytes,
+one byte per map. Map 0 → tileset 21 (Vegetable Valley world map).
+Map 43 → tileset 7 (Vegetable Valley Stage 1-1).
+
+### Tileset payload (1344 bytes)
+
+```
+0..1023     : 256 metatiles × 4 tile indices (TL, TR, BL, BR)
+              unpacked to RAM $7A00 (TL), $7B00 (TR), $7C00 (BL), $7D00 (BR)
+1024..1087  : 64 bytes of packed 2-bit palette indices, MSB-FIRST
+              (mt 0 = bits 6-7, mt 1 = bits 4-5, mt 2 = bits 2-3, mt 3 = bits 0-1).
+              Unpacker at $1C:AD2C uses LSR chains of 6,4,2,0.
+              Unpacked to $7E00.
+1088..1343  : 256 bytes of metatile collision / property flags
+```
+
+### Tooling
+
+- `tools/dump_map.py` — decompress any of the 327 maps (`--map N` or
+  `--bank/--addr`).
+- `tools/dump_tileset.py` — decompress any tileset, look up
+  tileset-for-map.
+- `tools/render_map_from_rom.py` — full ROM-only renderer using the
+  format above; per-tileset CHR/palette defaults captured from FCEUX
+  traces.
+- `tools/render_first_room.py` — trace-driven render that serves as
+  ground-truth reference.
 
 ## JSR $C43A call site summary
 
