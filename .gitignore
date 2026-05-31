@@ -16,3 +16,11 @@ third_party/compresch/extracted/
 /tmp/
 *.bin
 *.swp
+# Local session notes (never tracked in public repo)
+HANDOFF.md
+
+# Generated sprite/level galleries — regenerate via tools/
+galleries/
+
+# Python bytecode caches
+__pycache__/
