@@ -1,0 +1,1101 @@
+{
+  "chunks_scanned": [
+    "$1A",
+    "$1C",
+    "$30",
+    "$31",
+    "$32",
+    "$33",
+    "$37",
+    "$3A"
+  ],
+  "tables_by_chunk": {
+    "$1A": [
+      {
+        "anim_addr": "$99C0",
+        "anim_file": "$359D0",
+        "len": 32,
+        "first_ptr": "$9DB0",
+        "first_kind": "plain"
+      }
+    ],
+    "$1C": [
+      {
+        "anim_addr": "$94C2",
+        "anim_file": "$394D2",
+        "len": 32,
+        "first_ptr": "$9580",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9502",
+        "anim_file": "$39512",
+        "len": 18,
+        "first_ptr": "$9728",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9536",
+        "anim_file": "$39546",
+        "len": 18,
+        "first_ptr": "$9A2D",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$955C",
+        "anim_file": "$3956C",
+        "len": 18,
+        "first_ptr": "$9B49",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9CCB",
+        "anim_file": "$39CDB",
+        "len": 32,
+        "first_ptr": "$9D2B",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9D0B",
+        "anim_file": "$39D1B",
+        "len": 16,
+        "first_ptr": "$9EB9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9FB8",
+        "anim_file": "$39FC8",
+        "len": 5,
+        "first_ptr": "$9FC2",
+        "first_kind": "plain"
+      }
+    ],
+    "$30": [
+      {
+        "anim_addr": "$8000",
+        "anim_file": "$60010",
+        "len": 4,
+        "first_ptr": "$8008",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$802C",
+        "anim_file": "$6003C",
+        "len": 6,
+        "first_ptr": "$8038",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$806E",
+        "anim_file": "$6007E",
+        "len": 8,
+        "first_ptr": "$807E",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$80AB",
+        "anim_file": "$600BB",
+        "len": 6,
+        "first_ptr": "$80B7",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$80D5",
+        "anim_file": "$600E5",
+        "len": 8,
+        "first_ptr": "$80E5",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8138",
+        "anim_file": "$60148",
+        "len": 4,
+        "first_ptr": "$8140",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8164",
+        "anim_file": "$60174",
+        "len": 8,
+        "first_ptr": "$8174",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$81FC",
+        "anim_file": "$6020C",
+        "len": 8,
+        "first_ptr": "$820C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8294",
+        "anim_file": "$602A4",
+        "len": 4,
+        "first_ptr": "$829C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$82C0",
+        "anim_file": "$602D0",
+        "len": 4,
+        "first_ptr": "$82C8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$82EC",
+        "anim_file": "$602FC",
+        "len": 4,
+        "first_ptr": "$82F4",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8310",
+        "anim_file": "$60320",
+        "len": 15,
+        "first_ptr": "$832E",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$83B5",
+        "anim_file": "$603C5",
+        "len": 3,
+        "first_ptr": "$83AC",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$83D5",
+        "anim_file": "$603E5",
+        "len": 11,
+        "first_ptr": "$83EB",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$845C",
+        "anim_file": "$6046C",
+        "len": 8,
+        "first_ptr": "$846C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$84B2",
+        "anim_file": "$604C2",
+        "len": 9,
+        "first_ptr": "$82CC",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$850C",
+        "anim_file": "$6051C",
+        "len": 12,
+        "first_ptr": "$8524",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8590",
+        "anim_file": "$605A0",
+        "len": 8,
+        "first_ptr": "$85A0",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$85E8",
+        "anim_file": "$605F8",
+        "len": 32,
+        "first_ptr": "$8666",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8628",
+        "anim_file": "$60638",
+        "len": 31,
+        "first_ptr": "$8872",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8A81",
+        "anim_file": "$60A91",
+        "len": 3,
+        "first_ptr": "$8A87",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8AA2",
+        "anim_file": "$60AB2",
+        "len": 8,
+        "first_ptr": "$8AB2",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8B7A",
+        "anim_file": "$60B8A",
+        "len": 8,
+        "first_ptr": "$8B8A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8BC6",
+        "anim_file": "$60BD6",
+        "len": 12,
+        "first_ptr": "$8BDE",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8CA4",
+        "anim_file": "$60CB4",
+        "len": 11,
+        "first_ptr": "$8CBA",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8D6D",
+        "anim_file": "$60D7D",
+        "len": 24,
+        "first_ptr": "$8D9D",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8EED",
+        "anim_file": "$60EFD",
+        "len": 6,
+        "first_ptr": "$8EF9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8F2F",
+        "anim_file": "$60F3F",
+        "len": 5,
+        "first_ptr": "$8F39",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8F62",
+        "anim_file": "$60F72",
+        "len": 8,
+        "first_ptr": "$8F72",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8FB2",
+        "anim_file": "$60FC2",
+        "len": 20,
+        "first_ptr": "$8FDA",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9058",
+        "anim_file": "$61068",
+        "len": 16,
+        "first_ptr": "$9078",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9108",
+        "anim_file": "$61118",
+        "len": 32,
+        "first_ptr": "$919A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9148",
+        "anim_file": "$61158",
+        "len": 32,
+        "first_ptr": "$91CE",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9188",
+        "anim_file": "$61198",
+        "len": 9,
+        "first_ptr": "$9488",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$94C9",
+        "anim_file": "$614D9",
+        "len": 32,
+        "first_ptr": "$9535",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9509",
+        "anim_file": "$61519",
+        "len": 22,
+        "first_ptr": "$95BF",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$96C9",
+        "anim_file": "$616D9",
+        "len": 32,
+        "first_ptr": "$973F",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9709",
+        "anim_file": "$61719",
+        "len": 27,
+        "first_ptr": "$986A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$987B",
+        "anim_file": "$6188B",
+        "len": 32,
+        "first_ptr": "$98C7",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$98BB",
+        "anim_file": "$618CB",
+        "len": 6,
+        "first_ptr": "$9A73",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9AA9",
+        "anim_file": "$61AB9",
+        "len": 8,
+        "first_ptr": "$9AB9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9B01",
+        "anim_file": "$61B11",
+        "len": 8,
+        "first_ptr": "$9B11",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9BCC",
+        "anim_file": "$61BDC",
+        "len": 8,
+        "first_ptr": "$9BDC",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9C24",
+        "anim_file": "$61C34",
+        "len": 4,
+        "first_ptr": "$9C2C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9C50",
+        "anim_file": "$61C60",
+        "len": 4,
+        "first_ptr": "$9C58",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9C7C",
+        "anim_file": "$61C8C",
+        "len": 32,
+        "first_ptr": "$9CE8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9CBC",
+        "anim_file": "$61CCC",
+        "len": 13,
+        "first_ptr": "$9ECD",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9F66",
+        "anim_file": "$61F76",
+        "len": 4,
+        "first_ptr": "$9F6E",
+        "first_kind": "plain"
+      }
+    ],
+    "$31": [
+      {
+        "anim_addr": "$8000",
+        "anim_file": "$62010",
+        "len": 32,
+        "first_ptr": "$8164",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8040",
+        "anim_file": "$62050",
+        "len": 32,
+        "first_ptr": "$8364",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8080",
+        "anim_file": "$62090",
+        "len": 32,
+        "first_ptr": "$8584",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$80C0",
+        "anim_file": "$620D0",
+        "len": 32,
+        "first_ptr": "$878C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8100",
+        "anim_file": "$62110",
+        "len": 4,
+        "first_ptr": "$8964",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$810A",
+        "anim_file": "$6211A",
+        "len": 32,
+        "first_ptr": "$89E9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$814A",
+        "anim_file": "$6215A",
+        "len": 13,
+        "first_ptr": "$8B65",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8BCD",
+        "anim_file": "$62BDD",
+        "len": 22,
+        "first_ptr": "$8BF9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8E17",
+        "anim_file": "$62E27",
+        "len": 32,
+        "first_ptr": "$8E9D",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8E57",
+        "anim_file": "$62E67",
+        "len": 32,
+        "first_ptr": "$90A5",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8E97",
+        "anim_file": "$62EA7",
+        "len": 3,
+        "first_ptr": "$91FD",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9218",
+        "anim_file": "$63228",
+        "len": 32,
+        "first_ptr": "$92DA",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9258",
+        "anim_file": "$63268",
+        "len": 32,
+        "first_ptr": "$95D8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9298",
+        "anim_file": "$632A8",
+        "len": 32,
+        "first_ptr": "$9918",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9B35",
+        "anim_file": "$63B45",
+        "len": 32,
+        "first_ptr": "$9CB2",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9B75",
+        "anim_file": "$63B85",
+        "len": 32,
+        "first_ptr": "$9CE8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9BB5",
+        "anim_file": "$63BC5",
+        "len": 14,
+        "first_ptr": "$9F27",
+        "first_kind": "plain"
+      }
+    ],
+    "$32": [
+      {
+        "anim_addr": "$8000",
+        "anim_file": "$64010",
+        "len": 30,
+        "first_ptr": "$803C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8422",
+        "anim_file": "$64432",
+        "len": 8,
+        "first_ptr": "$8432",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$84A2",
+        "anim_file": "$644B2",
+        "len": 4,
+        "first_ptr": "$84AA",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$84CE",
+        "anim_file": "$644DE",
+        "len": 8,
+        "first_ptr": "$84DE",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8526",
+        "anim_file": "$64536",
+        "len": 10,
+        "first_ptr": "$853A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$85A4",
+        "anim_file": "$645B4",
+        "len": 6,
+        "first_ptr": "$85B0",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$85E6",
+        "anim_file": "$645F6",
+        "len": 20,
+        "first_ptr": "$860E",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$868D",
+        "anim_file": "$6469D",
+        "len": 32,
+        "first_ptr": "$86F3",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$86CD",
+        "anim_file": "$646DD",
+        "len": 10,
+        "first_ptr": "$875D",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$87AB",
+        "anim_file": "$647BB",
+        "len": 12,
+        "first_ptr": "$87C3",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$880B",
+        "anim_file": "$6481B",
+        "len": 12,
+        "first_ptr": "$8823",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$888F",
+        "anim_file": "$6489F",
+        "len": 15,
+        "first_ptr": "$88AD",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8934",
+        "anim_file": "$64944",
+        "len": 8,
+        "first_ptr": "$8944",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$89D4",
+        "anim_file": "$649E4",
+        "len": 16,
+        "first_ptr": "$89F4",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8A8E",
+        "anim_file": "$64A9E",
+        "len": 13,
+        "first_ptr": "$8ED8",
+        "first_kind": "r0_ovr"
+      },
+      {
+        "anim_addr": "$8AAA",
+        "anim_file": "$64ABA",
+        "len": 6,
+        "first_ptr": "$8F64",
+        "first_kind": "r0_ovr"
+      },
+      {
+        "anim_addr": "$8AB8",
+        "anim_file": "$64AC8",
+        "len": 8,
+        "first_ptr": "$907A",
+        "first_kind": "r0_ovr"
+      },
+      {
+        "anim_addr": "$8B30",
+        "anim_file": "$64B40",
+        "len": 3,
+        "first_ptr": "$9C18",
+        "first_kind": "r0_ovr"
+      },
+      {
+        "anim_addr": "$9C84",
+        "anim_file": "$65C94",
+        "len": 18,
+        "first_ptr": "$9CA8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E22",
+        "anim_file": "$65E32",
+        "len": 4,
+        "first_ptr": "$9E2A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E4E",
+        "anim_file": "$65E5E",
+        "len": 10,
+        "first_ptr": "$9E74",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E98",
+        "anim_file": "$65EA8",
+        "len": 9,
+        "first_ptr": "$9EEE",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9F37",
+        "anim_file": "$65F47",
+        "len": 4,
+        "first_ptr": "$9F3F",
+        "first_kind": "plain"
+      }
+    ],
+    "$33": [
+      {
+        "anim_addr": "$8000",
+        "anim_file": "$66010",
+        "len": 32,
+        "first_ptr": "$8068",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8040",
+        "anim_file": "$66050",
+        "len": 20,
+        "first_ptr": "$8346",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$838A",
+        "anim_file": "$6639A",
+        "len": 32,
+        "first_ptr": "$8422",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$83CA",
+        "anim_file": "$663DA",
+        "len": 32,
+        "first_ptr": "$863E",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$840A",
+        "anim_file": "$6641A",
+        "len": 12,
+        "first_ptr": "$87C2",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8B50",
+        "anim_file": "$66B60",
+        "len": 32,
+        "first_ptr": "$8C28",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8B90",
+        "anim_file": "$66BA0",
+        "len": 32,
+        "first_ptr": "$9068",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8BD0",
+        "anim_file": "$66BE0",
+        "len": 32,
+        "first_ptr": "$92AF",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8C10",
+        "anim_file": "$66C20",
+        "len": 12,
+        "first_ptr": "$8F04",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$963A",
+        "anim_file": "$6764A",
+        "len": 4,
+        "first_ptr": "$9674",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$96A6",
+        "anim_file": "$676B6",
+        "len": 4,
+        "first_ptr": "$96E8",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9796",
+        "anim_file": "$677A6",
+        "len": 8,
+        "first_ptr": "$9816",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9886",
+        "anim_file": "$67896",
+        "len": 6,
+        "first_ptr": "$98E1",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9930",
+        "anim_file": "$67940",
+        "len": 6,
+        "first_ptr": "$993C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9A40",
+        "anim_file": "$67A50",
+        "len": 8,
+        "first_ptr": "$9ABC",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9B28",
+        "anim_file": "$67B38",
+        "len": 6,
+        "first_ptr": "$9B8B",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9C20",
+        "anim_file": "$67C30",
+        "len": 10,
+        "first_ptr": "$9C8F",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9D35",
+        "anim_file": "$67D45",
+        "len": 14,
+        "first_ptr": "$9D6C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9DAF",
+        "anim_file": "$67DBF",
+        "len": 5,
+        "first_ptr": "$9DB9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9DE2",
+        "anim_file": "$67DF2",
+        "len": 4,
+        "first_ptr": "$9DEA",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E5A",
+        "anim_file": "$67E6A",
+        "len": 18,
+        "first_ptr": "$9E97",
+        "first_kind": "plain"
+      }
+    ],
+    "$37": [
+      {
+        "anim_addr": "$8000",
+        "anim_file": "$6E010",
+        "len": 15,
+        "first_ptr": "$82EF",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8026",
+        "anim_file": "$6E036",
+        "len": 4,
+        "first_ptr": "$8231",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8820",
+        "anim_file": "$6E830",
+        "len": 16,
+        "first_ptr": "$8840",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8984",
+        "anim_file": "$6E994",
+        "len": 22,
+        "first_ptr": "$89B0",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8AE4",
+        "anim_file": "$6EAF4",
+        "len": 32,
+        "first_ptr": "$8B34",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8B24",
+        "anim_file": "$6EB34",
+        "len": 8,
+        "first_ptr": "$8DEC",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8E74",
+        "anim_file": "$6EE84",
+        "len": 32,
+        "first_ptr": "$8F04",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8EB4",
+        "anim_file": "$6EEC4",
+        "len": 32,
+        "first_ptr": "$927C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8EF4",
+        "anim_file": "$6EF04",
+        "len": 8,
+        "first_ptr": "$9684",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$975C",
+        "anim_file": "$6F76C",
+        "len": 16,
+        "first_ptr": "$977C",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$980C",
+        "anim_file": "$6F81C",
+        "len": 30,
+        "first_ptr": "$9848",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$99D9",
+        "anim_file": "$6F9E9",
+        "len": 10,
+        "first_ptr": "$9A86",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9A97",
+        "anim_file": "$6FAA7",
+        "len": 32,
+        "first_ptr": "$9B01",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9AD7",
+        "anim_file": "$6FAE7",
+        "len": 20,
+        "first_ptr": "$9CAF",
+        "first_kind": "plain"
+      }
+    ],
+    "$3A": [
+      {
+        "anim_addr": "$8160",
+        "anim_file": "$74170",
+        "len": 17,
+        "first_ptr": "$8182",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$825F",
+        "anim_file": "$7426F",
+        "len": 8,
+        "first_ptr": "$826F",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8337",
+        "anim_file": "$74347",
+        "len": 17,
+        "first_ptr": "$8359",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$85DC",
+        "anim_file": "$745EC",
+        "len": 13,
+        "first_ptr": "$83C9",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$8652",
+        "anim_file": "$74662",
+        "len": 10,
+        "first_ptr": "$8666",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$86C0",
+        "anim_file": "$746D0",
+        "len": 10,
+        "first_ptr": "$86D4",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9589",
+        "anim_file": "$75599",
+        "len": 6,
+        "first_ptr": "$9595",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9651",
+        "anim_file": "$75661",
+        "len": 4,
+        "first_ptr": "$9659",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$96CD",
+        "anim_file": "$756DD",
+        "len": 9,
+        "first_ptr": "$96E4",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$96EE",
+        "anim_file": "$756FE",
+        "len": 4,
+        "first_ptr": "$96F6",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$971A",
+        "anim_file": "$7572A",
+        "len": 32,
+        "first_ptr": "$9796",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$975A",
+        "anim_file": "$7576A",
+        "len": 30,
+        "first_ptr": "$9A7A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9B40",
+        "anim_file": "$75B50",
+        "len": 16,
+        "first_ptr": "$9B60",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9C58",
+        "anim_file": "$75C68",
+        "len": 15,
+        "first_ptr": "$9C7F",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9CAC",
+        "anim_file": "$75CBC",
+        "len": 3,
+        "first_ptr": "$9CB2",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9CC1",
+        "anim_file": "$75CD1",
+        "len": 8,
+        "first_ptr": "$9CD1",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9D19",
+        "anim_file": "$75D29",
+        "len": 7,
+        "first_ptr": "$9D27",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9DCE",
+        "anim_file": "$75DDE",
+        "len": 3,
+        "first_ptr": "$9DD4",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9DEF",
+        "anim_file": "$75DFF",
+        "len": 3,
+        "first_ptr": "$9DF5",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E04",
+        "anim_file": "$75E14",
+        "len": 3,
+        "first_ptr": "$9E0A",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E25",
+        "anim_file": "$75E35",
+        "len": 10,
+        "first_ptr": "$9E39",
+        "first_kind": "plain"
+      },
+      {
+        "anim_addr": "$9E9C",
+        "anim_file": "$75EAC",
+        "len": 16,
+        "first_ptr": "$9EBC",
+        "first_kind": "plain"
+      }
+    ]
+  }
+}

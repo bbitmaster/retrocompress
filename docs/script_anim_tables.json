@@ -1,0 +1,1997 @@
+{
+  "records": [
+    {
+      "script_bank": 20,
+      "script_pc": 41403,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 20,
+      "script_pc": 41416,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 20,
+      "script_pc": 42232,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$16",
+      "steps": 4
+    },
+    {
+      "script_bank": 20,
+      "script_pc": 42496,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$04",
+      "steps": 1
+    },
+    {
+      "script_bank": 20,
+      "script_pc": 42830,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 20,
+      "script_pc": 45788,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 21,
+      "script_pc": 41483,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 1
+    },
+    {
+      "script_bank": 21,
+      "script_pc": 44052,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 43520,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D1",
+      "steps": 3
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 44464,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$C0",
+      "steps": 6
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 45574,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 45610,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 45953,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0F",
+      "steps": 4
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 46044,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 4
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 46070,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 46074,
+      "anim_lo": 194,
+      "anim_hi": 148,
+      "anim_bank": 28,
+      "terminated": "found",
+      "steps": 3
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 46226,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 46609,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47663,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$C0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47754,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47765,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47771,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47782,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 3
+    },
+    {
+      "script_bank": 22,
+      "script_pc": 47793,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 23,
+      "script_pc": 41488,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 1
+    },
+    {
+      "script_bank": 23,
+      "script_pc": 43994,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 24,
+      "script_pc": 45991,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 41039,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 41176,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 42041,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 42079,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 43810,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 43815,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 43822,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$54",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 43834,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 44112,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 45768,
+      "anim_lo": 194,
+      "anim_hi": 148,
+      "anim_bank": 28,
+      "terminated": "found",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 47003,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$16",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 47188,
+      "anim_lo": 203,
+      "anim_hi": 156,
+      "anim_bank": 28,
+      "terminated": "found",
+      "steps": 2
+    },
+    {
+      "script_bank": 25,
+      "script_pc": 47764,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33024,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$60",
+      "steps": 2
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33031,
+      "anim_lo": 232,
+      "anim_hi": 133,
+      "anim_bank": 48,
+      "terminated": "found",
+      "steps": 4
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33092,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33112,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$00",
+      "steps": 2
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33122,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33152,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33500,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$00",
+      "steps": 2
+    },
+    {
+      "script_bank": 34,
+      "script_pc": 33595,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$52",
+      "steps": 4
+    },
+    {
+      "script_bank": 35,
+      "script_pc": 42357,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 2
+    },
+    {
+      "script_bank": 35,
+      "script_pc": 42559,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$97",
+      "steps": 1
+    },
+    {
+      "script_bank": 35,
+      "script_pc": 45306,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 40985,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41019,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41026,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41314,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41317,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41343,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0F",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 41439,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 42783,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 43237,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 43705,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 43744,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44035,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$C0",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44043,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0B",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44234,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 5
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44248,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$52",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44906,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D6",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44921,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44937,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 44944,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 46980,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 46996,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 3
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 47004,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 47612,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0F",
+      "steps": 4
+    },
+    {
+      "script_bank": 36,
+      "script_pc": 47674,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 4
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 41732,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 41739,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 42679,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 42818,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 42860,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 43498,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 43515,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 43897,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 43936,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 37,
+      "script_pc": 43950,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 5
+    },
+    {
+      "script_bank": 38,
+      "script_pc": 46521,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 2
+    },
+    {
+      "script_bank": 38,
+      "script_pc": 46863,
+      "anim_lo": 171,
+      "anim_hi": 135,
+      "anim_bank": 50,
+      "terminated": "found",
+      "steps": 2
+    },
+    {
+      "script_bank": 38,
+      "script_pc": 48034,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 5
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 41223,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 41534,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 41774,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 42044,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 42210,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 1
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 42668,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$60",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 45390,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$58",
+      "steps": 3
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 45403,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D8",
+      "steps": 3
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 45418,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 4
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 45431,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 4
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 46983,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0F",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 48502,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 48577,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 40,
+      "script_pc": 48587,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 41128,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 41302,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 41375,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D1",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 42997,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 43157,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D1",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 43315,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 43401,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 44518,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 45799,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D4",
+      "steps": 1
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 46433,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 48293,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$29",
+      "steps": 3
+    },
+    {
+      "script_bank": 41,
+      "script_pc": 48303,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$29",
+      "steps": 3
+    },
+    {
+      "script_bank": 42,
+      "script_pc": 41396,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 42,
+      "script_pc": 43837,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$C2",
+      "steps": 3
+    },
+    {
+      "script_bank": 42,
+      "script_pc": 43910,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 3
+    },
+    {
+      "script_bank": 42,
+      "script_pc": 47143,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$25",
+      "steps": 2
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 41071,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 2
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 44887,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$51",
+      "steps": 4
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 47854,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 47877,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 47890,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 43,
+      "script_pc": 47913,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$52",
+      "steps": 3
+    },
+    {
+      "script_bank": 45,
+      "script_pc": 43162,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 6
+    },
+    {
+      "script_bank": 45,
+      "script_pc": 43168,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$05",
+      "steps": 1
+    },
+    {
+      "script_bank": 45,
+      "script_pc": 43921,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 2
+    },
+    {
+      "script_bank": 45,
+      "script_pc": 44047,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41450,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41498,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 3
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41526,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 3
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41826,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41873,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 41965,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$5F",
+      "steps": 4
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 42203,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 4
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 42314,
+      "anim_lo": 10,
+      "anim_hi": 130,
+      "anim_bank": 28,
+      "terminated": "found",
+      "steps": 5
+    },
+    {
+      "script_bank": 46,
+      "script_pc": 47400,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 47,
+      "script_pc": 42590,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$A5",
+      "steps": 1
+    },
+    {
+      "script_bank": 47,
+      "script_pc": 43021,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 4
+    },
+    {
+      "script_bank": 47,
+      "script_pc": 43599,
+      "anim_lo": 156,
+      "anim_hi": 156,
+      "anim_bank": 48,
+      "terminated": "found",
+      "steps": 1
+    },
+    {
+      "script_bank": 52,
+      "script_pc": 41492,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 41012,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 42656,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$51",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 42700,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 43823,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 4
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 43856,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 43891,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 44054,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 44347,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 1
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 46764,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 46801,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 54,
+      "script_pc": 47004,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 56,
+      "script_pc": 45079,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$0B",
+      "steps": 2
+    },
+    {
+      "script_bank": 56,
+      "script_pc": 45084,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41064,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$80",
+      "steps": 3
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41197,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41432,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 3
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41464,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$51",
+      "steps": 3
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41476,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41486,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41518,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41808,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 6
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 41850,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$51",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44002,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$AC",
+      "steps": 3
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44171,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44688,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44733,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$16",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44762,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$16",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44847,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$B0",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44856,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$10",
+      "steps": 4
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 44952,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$10",
+      "steps": 4
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45207,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45212,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45231,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45247,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45288,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45316,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$B0",
+      "steps": 2
+    },
+    {
+      "script_bank": 59,
+      "script_pc": 45328,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D1",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 41072,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43564,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 3
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43631,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43636,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43693,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43746,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43762,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$51",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43781,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 43797,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 6
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45111,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45576,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$00",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45603,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45607,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45627,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 2
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 45648,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 2
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 46096,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$09",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 46177,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 46198,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 46793,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$B0",
+      "steps": 3
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 47195,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 47228,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 47474,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "return",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 47596,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 1
+    },
+    {
+      "script_bank": 60,
+      "script_pc": 47894,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41150,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41168,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$B0",
+      "steps": 7
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41368,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41390,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$D0",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41466,
+      "anim_lo": 105,
+      "anim_hi": 153,
+      "anim_bank": 53,
+      "terminated": "found",
+      "steps": 2
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41493,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41512,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41562,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 41565,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 1
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 43464,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$01",
+      "steps": 2
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 43672,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "stop_$17",
+      "steps": 2
+    },
+    {
+      "script_bank": 61,
+      "script_pc": 44831,
+      "anim_lo": null,
+      "anim_hi": null,
+      "anim_bank": null,
+      "terminated": "wait_$50",
+      "steps": 3
+    }
+  ],
+  "opcodes_known": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "note": "For each unique spawn target, walk bytecode until opcode $1A (set anim table) is hit. Returns (anim_lo, anim_hi, anim_bank) on success."
+}

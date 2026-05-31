@@ -1,0 +1,182 @@
+[
+  {
+    "spawn_id": 0,
+    "script_bank": 24,
+    "script_pc": 41745,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 1,
+    "script_bank": 20,
+    "script_pc": 40960,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 2,
+    "script_bank": 22,
+    "script_pc": 43578,
+    "op_1a_at_offset": 2,
+    "anim_lo": 194,
+    "anim_hi": 148,
+    "anim_bank": 28
+  },
+  {
+    "spawn_id": 3,
+    "script_bank": 22,
+    "script_pc": 45915,
+    "op_1a_at_offset": 2,
+    "anim_lo": 203,
+    "anim_hi": 156,
+    "anim_bank": 28
+  },
+  {
+    "spawn_id": 4,
+    "script_bank": 25,
+    "script_pc": 43719,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 5,
+    "script_bank": 25,
+    "script_pc": 46953,
+    "op_1a_at_offset": 0,
+    "anim_lo": 184,
+    "anim_hi": 159,
+    "anim_bank": 28
+  },
+  {
+    "spawn_id": 6,
+    "script_bank": 35,
+    "script_pc": 40960,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 9,
+    "script_bank": 56,
+    "script_pc": 45001,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 32,
+    "script_bank": 45,
+    "script_pc": 42340,
+    "op_1a_at_offset": 0,
+    "anim_lo": 212,
+    "anim_hi": 137,
+    "anim_bank": 50
+  },
+  {
+    "spawn_id": 61,
+    "script_bank": 47,
+    "script_pc": 40977,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 71,
+    "script_bank": 45,
+    "script_pc": 43080,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 79,
+    "script_bank": 42,
+    "script_pc": 43158,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 89,
+    "script_bank": 38,
+    "script_pc": 47515,
+    "op_1a_at_offset": 5,
+    "anim_lo": 132,
+    "anim_hi": 139,
+    "anim_bank": 48
+  },
+  {
+    "spawn_id": 96,
+    "script_bank": 41,
+    "script_pc": 47711,
+    "op_1a_at_offset": 5,
+    "anim_lo": 132,
+    "anim_hi": 138,
+    "anim_bank": 50
+  },
+  {
+    "spawn_id": 99,
+    "script_bank": 45,
+    "script_pc": 43457,
+    "op_1a_at_offset": 0,
+    "anim_lo": 53,
+    "anim_hi": 157,
+    "anim_bank": 51
+  },
+  {
+    "spawn_id": 100,
+    "script_bank": 45,
+    "script_pc": 44645,
+    "op_1a_at_offset": 5,
+    "anim_lo": 175,
+    "anim_hi": 157,
+    "anim_bank": 51
+  },
+  {
+    "spawn_id": 101,
+    "script_bank": 60,
+    "script_pc": 40960,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 102,
+    "script_bank": 59,
+    "script_pc": 40960,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 103,
+    "script_bank": 59,
+    "script_pc": 43903,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  },
+  {
+    "spawn_id": 106,
+    "script_bank": 54,
+    "script_pc": 44182,
+    "op_1a_at_offset": null,
+    "anim_lo": null,
+    "anim_hi": null,
+    "anim_bank": null
+  }
+]

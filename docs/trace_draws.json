@@ -1,0 +1,839 @@
+{
+  "events_count": 4858,
+  "unique_tuples": 119,
+  "top": [
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32833,
+      "variant": "plain",
+      "count": 305
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33664,
+      "variant": "r0_ovr_dda3",
+      "count": 271
+    },
+    {
+      "slot": 6,
+      "r6": 28,
+      "ms_addr": 40361,
+      "variant": "plain",
+      "count": 230
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 32776,
+      "variant": "plain",
+      "count": 216
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 32794,
+      "variant": "plain",
+      "count": 209
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33716,
+      "variant": "r0_ovr_dda3",
+      "count": 200
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 39989,
+      "variant": "plain",
+      "count": 181
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33612,
+      "variant": "r0_ovr_dda3",
+      "count": 180
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32851,
+      "variant": "plain",
+      "count": 132
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 39989,
+      "variant": "plain",
+      "count": 127
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 39989,
+      "variant": "plain",
+      "count": 125
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 32997,
+      "variant": "plain",
+      "count": 109
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33408,
+      "variant": "r0_ovr_dda3",
+      "count": 106
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33536,
+      "variant": "r0_ovr_dda3",
+      "count": 106
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32785,
+      "variant": "plain",
+      "count": 105
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33556,
+      "variant": "r0_ovr_dda3",
+      "count": 101
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33576,
+      "variant": "r0_ovr_dda3",
+      "count": 100
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 40007,
+      "variant": "plain",
+      "count": 95
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 34676,
+      "variant": "r0_ovr_dda3",
+      "count": 85
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 32785,
+      "variant": "plain",
+      "count": 79
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32803,
+      "variant": "plain",
+      "count": 79
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33033,
+      "variant": "plain",
+      "count": 78
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 32803,
+      "variant": "plain",
+      "count": 63
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33015,
+      "variant": "plain",
+      "count": 62
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33012,
+      "variant": "r0_ovr_dda3",
+      "count": 61
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33060,
+      "variant": "plain",
+      "count": 60
+    },
+    {
+      "slot": 16,
+      "r6": 48,
+      "ms_addr": 33071,
+      "variant": "plain",
+      "count": 60
+    },
+    {
+      "slot": 13,
+      "r6": 48,
+      "ms_addr": 33071,
+      "variant": "plain",
+      "count": 60
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32794,
+      "variant": "plain",
+      "count": 53
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32776,
+      "variant": "plain",
+      "count": 52
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 40784,
+      "variant": "r0_ovr_dda3",
+      "count": 48
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 40007,
+      "variant": "plain",
+      "count": 47
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34093,
+      "variant": "plain",
+      "count": 47
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 40007,
+      "variant": "plain",
+      "count": 44
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 32869,
+      "variant": "plain",
+      "count": 41
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33006,
+      "variant": "plain",
+      "count": 40
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 32785,
+      "variant": "plain",
+      "count": 39
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33051,
+      "variant": "plain",
+      "count": 38
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35046,
+      "variant": "r0_ovr_dda3",
+      "count": 35
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 33071,
+      "variant": "plain",
+      "count": 32
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 33636,
+      "variant": "r0_ovr_dda3",
+      "count": 32
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 32803,
+      "variant": "plain",
+      "count": 32
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 33656,
+      "variant": "r0_ovr_dda3",
+      "count": 30
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 34776,
+      "variant": "r0_ovr_dda3",
+      "count": 29
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 33071,
+      "variant": "plain",
+      "count": 28
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34165,
+      "variant": "plain",
+      "count": 27
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33024,
+      "variant": "plain",
+      "count": 26
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34111,
+      "variant": "plain",
+      "count": 26
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35026,
+      "variant": "r0_ovr_dda3",
+      "count": 24
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 34796,
+      "variant": "r0_ovr_dda3",
+      "count": 20
+    },
+    {
+      "slot": 3,
+      "r6": 28,
+      "ms_addr": 40121,
+      "variant": "plain",
+      "count": 16
+    },
+    {
+      "slot": 3,
+      "r6": 28,
+      "ms_addr": 40130,
+      "variant": "plain",
+      "count": 16
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 34756,
+      "variant": "r0_ovr_dda3",
+      "count": 15
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33368,
+      "variant": "r0_ovr_dda3",
+      "count": 14
+    },
+    {
+      "slot": 3,
+      "r6": 28,
+      "ms_addr": 38282,
+      "variant": "plain",
+      "count": 14
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33524,
+      "variant": "plain",
+      "count": 14
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33042,
+      "variant": "plain",
+      "count": 13
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34129,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34147,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 34183,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 7,
+      "r6": 28,
+      "ms_addr": 40235,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 7,
+      "r6": 28,
+      "ms_addr": 40253,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 7,
+      "r6": 28,
+      "ms_addr": 40271,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 7,
+      "r6": 28,
+      "ms_addr": 40289,
+      "variant": "plain",
+      "count": 12
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 34235,
+      "variant": "plain",
+      "count": 10
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33192,
+      "variant": "r0_ovr_dda3",
+      "count": 10
+    },
+    {
+      "slot": 6,
+      "r6": 28,
+      "ms_addr": 40289,
+      "variant": "plain",
+      "count": 10
+    },
+    {
+      "slot": 6,
+      "r6": 28,
+      "ms_addr": 40235,
+      "variant": "plain",
+      "count": 10
+    },
+    {
+      "slot": 6,
+      "r6": 28,
+      "ms_addr": 40253,
+      "variant": "plain",
+      "count": 10
+    },
+    {
+      "slot": 6,
+      "r6": 28,
+      "ms_addr": 40271,
+      "variant": "plain",
+      "count": 10
+    },
+    {
+      "slot": 13,
+      "r6": 48,
+      "ms_addr": 33524,
+      "variant": "plain",
+      "count": 9
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 33874,
+      "variant": "plain",
+      "count": 9
+    },
+    {
+      "slot": 15,
+      "r6": 48,
+      "ms_addr": 33879,
+      "variant": "plain",
+      "count": 9
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 40744,
+      "variant": "r0_ovr_dda3",
+      "count": 8
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 40764,
+      "variant": "r0_ovr_dda3",
+      "count": 8
+    },
+    {
+      "slot": 10,
+      "r6": 48,
+      "ms_addr": 33529,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 13,
+      "r6": 48,
+      "ms_addr": 33529,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 34253,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 34271,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 12,
+      "r6": 48,
+      "ms_addr": 34217,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33212,
+      "variant": "r0_ovr_dda3",
+      "count": 8
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33428,
+      "variant": "r0_ovr_dda3",
+      "count": 8
+    },
+    {
+      "slot": 8,
+      "r6": 28,
+      "ms_addr": 40253,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 8,
+      "r6": 28,
+      "ms_addr": 40271,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 8,
+      "r6": 28,
+      "ms_addr": 40289,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 8,
+      "r6": 28,
+      "ms_addr": 40235,
+      "variant": "plain",
+      "count": 8
+    },
+    {
+      "slot": 16,
+      "r6": 48,
+      "ms_addr": 33524,
+      "variant": "plain",
+      "count": 7
+    },
+    {
+      "slot": 16,
+      "r6": 48,
+      "ms_addr": 33529,
+      "variant": "plain",
+      "count": 7
+    },
+    {
+      "slot": 9,
+      "r6": 48,
+      "ms_addr": 33524,
+      "variant": "plain",
+      "count": 6
+    },
+    {
+      "slot": 9,
+      "r6": 48,
+      "ms_addr": 33529,
+      "variant": "plain",
+      "count": 6
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 39989,
+      "variant": "r1_ovr_dde7",
+      "count": 6
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 39989,
+      "variant": "r1_ovr_dde9",
+      "count": 6
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35466,
+      "variant": "r0_ovr_dda3",
+      "count": 6
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35446,
+      "variant": "r0_ovr_dda3",
+      "count": 6
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33232,
+      "variant": "r0_ovr_dda3",
+      "count": 5
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35486,
+      "variant": "r0_ovr_dda3",
+      "count": 5
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 33032,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 36466,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 36446,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35082,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35134,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35342,
+      "variant": "r0_ovr_dda3",
+      "count": 4
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 36426,
+      "variant": "r0_ovr_dda3",
+      "count": 2
+    },
+    {
+      "slot": 1,
+      "r6": 28,
+      "ms_addr": 36476,
+      "variant": "r0_ovr_dda3",
+      "count": 2
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35186,
+      "variant": "r0_ovr_dda3",
+      "count": 2
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35290,
+      "variant": "r0_ovr_dda3",
+      "count": 2
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35394,
+      "variant": "r0_ovr_dda3",
+      "count": 2
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 34406,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35287,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35304,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35321,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35338,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35355,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35372,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35389,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35406,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35423,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 14,
+      "r6": 48,
+      "ms_addr": 35440,
+      "variant": "plain",
+      "count": 1
+    },
+    {
+      "slot": 1,
+      "r6": 26,
+      "ms_addr": 35238,
+      "variant": "r0_ovr_dda3",
+      "count": 1
+    }
+  ]
+}

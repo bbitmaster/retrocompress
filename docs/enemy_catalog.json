@@ -1,0 +1,616 @@
+{
+  "sites": [
+    {
+      "file": 156846,
+      "chunk": 19,
+      "cpu_lo": 33950,
+      "cpu_hi": 42142,
+      "cpu_c0": 50334,
+      "kind": "JSR",
+      "spawn_id": 1,
+      "target_pc": 40960,
+      "target_bank": 20,
+      "indexed_table": null
+    },
+    {
+      "file": 156880,
+      "chunk": 19,
+      "cpu_lo": 33984,
+      "cpu_hi": 42176,
+      "cpu_c0": 50368,
+      "kind": "JSR",
+      "spawn_id": 6,
+      "target_pc": 40960,
+      "target_bank": 35,
+      "indexed_table": null
+    },
+    {
+      "file": 158159,
+      "chunk": 19,
+      "cpu_lo": 35263,
+      "cpu_hi": 43455,
+      "cpu_c0": 51647,
+      "kind": "JSR",
+      "spawn_id": 4,
+      "target_pc": 43719,
+      "target_bank": 25,
+      "indexed_table": null
+    },
+    {
+      "file": 270526,
+      "chunk": 33,
+      "cpu_lo": 32942,
+      "cpu_hi": 41134,
+      "cpu_c0": 49326,
+      "kind": "JSR",
+      "spawn_id": 9,
+      "target_pc": 45001,
+      "target_bank": 56,
+      "indexed_table": null
+    },
+    {
+      "file": 342496,
+      "chunk": 41,
+      "cpu_lo": 39376,
+      "cpu_hi": 47568,
+      "cpu_c0": 55760,
+      "kind": "JSR",
+      "spawn_id": 96,
+      "target_pc": 47711,
+      "target_bank": 41,
+      "indexed_table": null
+    },
+    {
+      "file": 346267,
+      "chunk": 42,
+      "cpu_lo": 34955,
+      "cpu_hi": 43147,
+      "cpu_c0": 51339,
+      "kind": "JSR",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": null
+    },
+    {
+      "file": 348264,
+      "chunk": 42,
+      "cpu_lo": 36952,
+      "cpu_hi": 45144,
+      "cpu_c0": 53336,
+      "kind": "JSR",
+      "spawn_id": 79,
+      "target_pc": 43158,
+      "target_bank": 42,
+      "indexed_table": null
+    },
+    {
+      "file": 372497,
+      "chunk": 45,
+      "cpu_lo": 36609,
+      "cpu_hi": 44801,
+      "cpu_c0": 52993,
+      "kind": "JSR",
+      "spawn_id": 99,
+      "target_pc": 43457,
+      "target_bank": 45,
+      "indexed_table": null
+    },
+    {
+      "file": 375206,
+      "chunk": 45,
+      "cpu_lo": 39318,
+      "cpu_hi": 47510,
+      "cpu_c0": 55702,
+      "kind": "JSR",
+      "spawn_id": 71,
+      "target_pc": 43080,
+      "target_bank": 45,
+      "indexed_table": null
+    },
+    {
+      "file": 375284,
+      "chunk": 45,
+      "cpu_lo": 39396,
+      "cpu_hi": 47588,
+      "cpu_c0": 55780,
+      "kind": "JSR",
+      "spawn_id": 100,
+      "target_pc": 44645,
+      "target_bank": 45,
+      "indexed_table": null
+    },
+    {
+      "file": 376933,
+      "chunk": 46,
+      "cpu_lo": 32853,
+      "cpu_hi": 41045,
+      "cpu_c0": 49237,
+      "kind": "JSR",
+      "spawn_id": 106,
+      "target_pc": 44182,
+      "target_bank": 54,
+      "indexed_table": null
+    },
+    {
+      "file": 462477,
+      "chunk": 56,
+      "cpu_lo": 36477,
+      "cpu_hi": 44669,
+      "cpu_c0": 52861,
+      "kind": "JSR",
+      "spawn_id": 5,
+      "target_pc": 46953,
+      "target_bank": 25,
+      "indexed_table": null
+    },
+    {
+      "file": 517613,
+      "chunk": 63,
+      "cpu_lo": 34269,
+      "cpu_hi": 42461,
+      "cpu_c0": 50653,
+      "kind": "JSR",
+      "spawn_id": 61,
+      "target_pc": 40977,
+      "target_bank": 47,
+      "indexed_table": null
+    },
+    {
+      "file": 518748,
+      "chunk": 63,
+      "cpu_lo": 35404,
+      "cpu_hi": 43596,
+      "cpu_c0": 51788,
+      "kind": "JSR",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": {
+        "table_cpu": 43474,
+        "index_reg": "Y",
+        "entries": [
+          {
+            "idx": 0,
+            "spawn_id": 3,
+            "target_pc": 45915,
+            "target_bank": 22
+          },
+          {
+            "idx": 1,
+            "spawn_id": 32,
+            "target_pc": 42340,
+            "target_bank": 45
+          }
+        ]
+      }
+    },
+    {
+      "file": 520345,
+      "chunk": 63,
+      "cpu_lo": 37001,
+      "cpu_hi": 45193,
+      "cpu_c0": 53385,
+      "kind": "JSR",
+      "spawn_id": 0,
+      "target_pc": 41745,
+      "target_bank": 24,
+      "indexed_table": null
+    },
+    {
+      "file": 156312,
+      "chunk": 19,
+      "cpu_lo": 33416,
+      "cpu_hi": 41608,
+      "cpu_c0": 49800,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": {
+        "table_cpu": 41611,
+        "index_reg": "Y",
+        "entries": [
+          {
+            "idx": 0,
+            "spawn_id": 101,
+            "target_pc": 40960,
+            "target_bank": 60
+          },
+          {
+            "idx": 1,
+            "spawn_id": 102,
+            "target_pc": 40960,
+            "target_bank": 59
+          },
+          {
+            "idx": 2,
+            "spawn_id": 103,
+            "target_pc": 43903,
+            "target_bank": 59
+          }
+        ]
+      }
+    },
+    {
+      "file": 276933,
+      "chunk": 33,
+      "cpu_lo": 39349,
+      "cpu_hi": 47541,
+      "cpu_c0": 55733,
+      "kind": "JMP",
+      "spawn_id": 2,
+      "target_pc": 43578,
+      "target_bank": 22,
+      "indexed_table": null
+    },
+    {
+      "file": 276983,
+      "chunk": 33,
+      "cpu_lo": 39399,
+      "cpu_hi": 47591,
+      "cpu_c0": 55783,
+      "kind": "JMP",
+      "spawn_id": 2,
+      "target_pc": 43578,
+      "target_bank": 22,
+      "indexed_table": null
+    },
+    {
+      "file": 277006,
+      "chunk": 33,
+      "cpu_lo": 39422,
+      "cpu_hi": 47614,
+      "cpu_c0": 55806,
+      "kind": "JMP",
+      "spawn_id": 3,
+      "target_pc": 45915,
+      "target_bank": 22,
+      "indexed_table": null
+    },
+    {
+      "file": 278240,
+      "chunk": 33,
+      "cpu_lo": 40656,
+      "cpu_hi": 48848,
+      "cpu_c0": 57040,
+      "kind": "JMP",
+      "spawn_id": 5,
+      "target_pc": 46953,
+      "target_bank": 25,
+      "indexed_table": null
+    },
+    {
+      "file": 280155,
+      "chunk": 34,
+      "cpu_lo": 34379,
+      "cpu_hi": 42571,
+      "cpu_c0": 50763,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": {
+        "table_cpu": 24692,
+        "index_reg": "X",
+        "entries": []
+      }
+    },
+    {
+      "file": 284150,
+      "chunk": 34,
+      "cpu_lo": 38374,
+      "cpu_hi": 46566,
+      "cpu_c0": 54758,
+      "kind": "JMP",
+      "spawn_id": 89,
+      "target_pc": 47515,
+      "target_bank": 38,
+      "indexed_table": null
+    },
+    {
+      "file": 320754,
+      "chunk": 39,
+      "cpu_lo": 34018,
+      "cpu_hi": 42210,
+      "cpu_c0": 50402,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": null
+    },
+    {
+      "file": 325502,
+      "chunk": 39,
+      "cpu_lo": 38766,
+      "cpu_hi": 46958,
+      "cpu_c0": 55150,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": {
+        "table_cpu": 24692,
+        "index_reg": "X",
+        "entries": []
+      }
+    },
+    {
+      "file": 342598,
+      "chunk": 41,
+      "cpu_lo": 39478,
+      "cpu_hi": 47670,
+      "cpu_c0": 55862,
+      "kind": "JMP",
+      "spawn_id": 96,
+      "target_pc": 47711,
+      "target_bank": 41,
+      "indexed_table": null
+    },
+    {
+      "file": 426295,
+      "chunk": 52,
+      "cpu_lo": 33063,
+      "cpu_hi": 41255,
+      "cpu_c0": 49447,
+      "kind": "JMP",
+      "spawn_id": 2,
+      "target_pc": 43578,
+      "target_bank": 22,
+      "indexed_table": null
+    },
+    {
+      "file": 503958,
+      "chunk": 61,
+      "cpu_lo": 36998,
+      "cpu_hi": 45190,
+      "cpu_c0": 53382,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": {
+        "table_cpu": 45193,
+        "index_reg": "Y",
+        "entries": [
+          {
+            "idx": 0,
+            "spawn_id": 103,
+            "target_pc": 43903,
+            "target_bank": 59
+          },
+          {
+            "idx": 1,
+            "spawn_id": 101,
+            "target_pc": 40960,
+            "target_bank": 60
+          },
+          {
+            "idx": 2,
+            "spawn_id": 102,
+            "target_pc": 40960,
+            "target_bank": 59
+          }
+        ]
+      }
+    },
+    {
+      "file": 515805,
+      "chunk": 62,
+      "cpu_lo": 40653,
+      "cpu_hi": 48845,
+      "cpu_c0": 57037,
+      "kind": "JMP",
+      "spawn_id": null,
+      "target_pc": null,
+      "target_bank": null,
+      "indexed_table": null
+    }
+  ],
+  "by_spawn_id": {
+    "dynamic": [
+      {
+        "chunk": 42,
+        "cpu_hi": "$A88B",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 63,
+        "cpu_hi": "$AA4C",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 19,
+        "cpu_hi": "$A288",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 34,
+        "cpu_hi": "$A64B",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 39,
+        "cpu_hi": "$A4E2",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 39,
+        "cpu_hi": "$B76E",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 61,
+        "cpu_hi": "$B086",
+        "target_pc": null,
+        "target_bank": null
+      },
+      {
+        "chunk": 62,
+        "cpu_hi": "$BECD",
+        "target_pc": null,
+        "target_bank": null
+      }
+    ],
+    "$00": [
+      {
+        "chunk": 63,
+        "cpu_hi": "$B089",
+        "target_pc": "$A311",
+        "target_bank": "$18"
+      }
+    ],
+    "$01": [
+      {
+        "chunk": 19,
+        "cpu_hi": "$A49E",
+        "target_pc": "$A000",
+        "target_bank": "$14"
+      }
+    ],
+    "$02": [
+      {
+        "chunk": 33,
+        "cpu_hi": "$B9B5",
+        "target_pc": "$AA3A",
+        "target_bank": "$16"
+      },
+      {
+        "chunk": 33,
+        "cpu_hi": "$B9E7",
+        "target_pc": "$AA3A",
+        "target_bank": "$16"
+      },
+      {
+        "chunk": 52,
+        "cpu_hi": "$A127",
+        "target_pc": "$AA3A",
+        "target_bank": "$16"
+      }
+    ],
+    "$03": [
+      {
+        "chunk": 33,
+        "cpu_hi": "$B9FE",
+        "target_pc": "$B35B",
+        "target_bank": "$16"
+      }
+    ],
+    "$04": [
+      {
+        "chunk": 19,
+        "cpu_hi": "$A9BF",
+        "target_pc": "$AAC7",
+        "target_bank": "$19"
+      }
+    ],
+    "$05": [
+      {
+        "chunk": 56,
+        "cpu_hi": "$AE7D",
+        "target_pc": "$B769",
+        "target_bank": "$19"
+      },
+      {
+        "chunk": 33,
+        "cpu_hi": "$BED0",
+        "target_pc": "$B769",
+        "target_bank": "$19"
+      }
+    ],
+    "$06": [
+      {
+        "chunk": 19,
+        "cpu_hi": "$A4C0",
+        "target_pc": "$A000",
+        "target_bank": "$23"
+      }
+    ],
+    "$09": [
+      {
+        "chunk": 33,
+        "cpu_hi": "$A0AE",
+        "target_pc": "$AFC9",
+        "target_bank": "$38"
+      }
+    ],
+    "$3D": [
+      {
+        "chunk": 63,
+        "cpu_hi": "$A5DD",
+        "target_pc": "$A011",
+        "target_bank": "$2F"
+      }
+    ],
+    "$47": [
+      {
+        "chunk": 45,
+        "cpu_hi": "$B996",
+        "target_pc": "$A848",
+        "target_bank": "$2D"
+      }
+    ],
+    "$4F": [
+      {
+        "chunk": 42,
+        "cpu_hi": "$B058",
+        "target_pc": "$A896",
+        "target_bank": "$2A"
+      }
+    ],
+    "$59": [
+      {
+        "chunk": 34,
+        "cpu_hi": "$B5E6",
+        "target_pc": "$B99B",
+        "target_bank": "$26"
+      }
+    ],
+    "$60": [
+      {
+        "chunk": 41,
+        "cpu_hi": "$B9D0",
+        "target_pc": "$BA5F",
+        "target_bank": "$29"
+      },
+      {
+        "chunk": 41,
+        "cpu_hi": "$BA36",
+        "target_pc": "$BA5F",
+        "target_bank": "$29"
+      }
+    ],
+    "$63": [
+      {
+        "chunk": 45,
+        "cpu_hi": "$AF01",
+        "target_pc": "$A9C1",
+        "target_bank": "$2D"
+      }
+    ],
+    "$64": [
+      {
+        "chunk": 45,
+        "cpu_hi": "$B9E4",
+        "target_pc": "$AE65",
+        "target_bank": "$2D"
+      }
+    ],
+    "$6A": [
+      {
+        "chunk": 46,
+        "cpu_hi": "$A055",
+        "target_pc": "$AC96",
+        "target_bank": "$36"
+      }
+    ]
+  },
+  "note": "Every static call site for $3E:$CBA2, the in-game enemy spawn routine. spawn_id is the A value loaded immediately before the JSR (None if not statically resolvable). target_pc/bank derived from spawn_table.json (the 112-entry dispatch table at $18:A0A7/A117/A187 in chunk $18)."
+}

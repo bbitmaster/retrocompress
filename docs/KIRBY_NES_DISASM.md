@@ -306,7 +306,7 @@ Map 43 → tileset 7 (Vegetable Valley Stage 1-1).
 - `tools/render_first_room.py` — trace-driven render that serves as
   ground-truth reference.
 
-## Per-map CHR bank & palette setup (verified 2026-05-25)
+## Per-map CHR bank & palette setup
 
 When a map loads, two distinct paths set up the 6 CHR bank registers
 R0..R5 (zero-page shadow at `$0042..$0047`) and the 32-byte BG palette
@@ -405,3 +405,382 @@ relevant for static map rendering.
 | TABLE_Y_2 ($B531/$B55E) | 1 | TBD (probably ~8 more) |
 | INLINE single-shot | 13 | TBD per blob — bank resolution needed |
 | **Total potential blobs** | **20** | **~390+ unique compressed sources** |
+
+## Sprite engine
+
+Kirby's Adventure uses a per-character metasprite engine — each game
+character / enemy / projectile is a list of hardware sprites at signed
+(dx, dy) offsets from a single (X, Y) anchor position. OAM is
+double-buffered at WRAM `$0200..$02FF` and `$0300..$03FF`, and gets
+DMA'd to the PPU once per frame via `STA $4014` at `$1F:C360` (A
+alternates between `$02` and `$03`).
+
+### Metasprite definition format
+
+```
+metasprite:
+    [ count : u8 ]
+    [ dx : i8, dy : i8, tile : u8, attr : u8 ] * count
+```
+
+- `dx`, `dy` are signed offsets added to the character's anchor X / Y
+  (zp `$6A`/`$6B` = X, `$6C`/`$6D` = Y).
+- `tile` is the source tile index; the blit writes `tile XOR $01` to
+  OAM byte 1 — this effectively pairs adjacent tiles (low bit toggles
+  between halves of 8×16 sprite mode, or between sprite-pattern-table
+  halves depending on PPU config).
+- `attr` is the standard NES OAM byte 2: bit 7 V-flip, bit 6 H-flip,
+  bit 5 BG-priority, bits 0-1 palette.
+
+Sprites that would land off-screen vertically are hidden by writing
+`Y = $F0` instead of the computed Y.
+
+### Blit routine — `$1F:DA89`
+
+```
+DA89  STA $16            ; src_lo  (caller passes A=lo, X=hi)
+DA8B  STX $17            ; src_hi
+DA8D  LDY #$00
+DA8F  LDX $68            ; OAM cursor (advances across multiple blit calls)
+DA91  LDA ($16),Y        ; A = count
+DA93  STA $00
+DA95  INY
+DA96  LDA $603D / LSR / BCS $DAEE   ; check OAM-page flag → write to $0200 or $0300
+
+(per-entry loop at DA9C — verified against trace)
+       LDA ($16),Y → ADC $6A → STA $0203,X    ; X position
+       LDA ($16),Y → ADC $6C → STA $0200,X    ; Y position
+       LDA ($16),Y → EOR #$01 → STA $0201,X   ; tile (XOR'd bit 0)
+       LDA ($16),Y → STA $0202,X              ; attr
+       INX ×4                                  ; next OAM slot
+       DEC $00 / BNE                           ; loop count
+```
+
+A parallel copy at `$DAEE..$DB4F` mirrors the same code but writes to
+`$0300,X` instead — that's the second OAM buffer.
+
+### Dispatcher / animation lookup — `$1F:CD33`
+
+Iterates over the character slots, computing the metasprite pointer
+from the current animation frame and the per-character animation
+table:
+
+```
+CD33  LDA $6182,X        ; CHAR_DRAW_LO[slot] -> $6038
+CD36  STA $6038          ; (low byte of indirect call thunk)
+CD39  LDA $6194,X        ; CHAR_DRAW_HI[slot] -> $6039
+CD3C  STA $6039          ; usually = $DA89 (the generic blit)
+
+CD3F  LDA $62C6,X        ; CHAR_ANIM_FRAME[slot]
+CD42  CMP #$FF           ; $FF = "no sprite this frame"
+CD44  BEQ skip
+
+CD48  ASL                ; A = frame * 2 (2-byte ptr per anim entry)
+       ...               ; with carry handling for >128 frames
+CD4F  ADC $62D8,X        ; + CHAR_ANIM_TBL_LO[slot]
+CD52  STA $16
+CD56  ADC $62EA,X        ; + CHAR_ANIM_TBL_HI[slot]
+CD59  STA $17
+                         ; ($16/$17) -> entry in animation table
+
+CD5D  LDA ($16),Y=1      ; A = metasprite_hi
+CD5F  TAX
+CD60  DEY
+CD61  LDA ($16),Y=0      ; A = metasprite_lo
+CD63  JSR $D7AB          ; -> JMP ($6038) -> $DA89 (or per-character)
+```
+
+### Per-character WRAM state slots
+
+(All indexed by slot `X` — Kirby is presumably slot 0, then enemies)
+
+| Address | Purpose |
+|---|---|
+| `$6182,X` / `$6194,X` | LO / HI of draw routine (typically `$DA89`) |
+| `$62C6,X` | current animation frame number |
+| `$62D8,X` / `$62EA,X` | LO / HI of animation table |
+| `$6A`/`$6B` | scratch: X position (set per draw) |
+| `$6C`/`$6D` | scratch: Y position (set per draw) |
+| `$68` | OAM cursor (next free sprite slot * 4) |
+
+### Tools
+
+- `tools/dump_metasprite.py` — decode a metasprite from ROM by file
+  offset or `(bank, CPU_addr)`. Verified against the live blit captured
+  in `kirb_door1.log` (1-sprite particle at file `$3959A` and a 6-sprite
+  enemy at file `$395C4`).
+
+### Character architecture
+
+Each character is a **bytecode VM script**, not a flat-table entry.
+Per-slot VM state in WRAM:
+
+| Address | Meaning |
+|---|---|
+| `$6380,X` / `$63A0,X` | script PC (lo / hi) |
+| `$63C0,X` | script PRG bank |
+| `$6360,X` | per-instruction delay countdown |
+| `$6340,X` | call-stack pointer (per-character stack at `$6400 + slot*16`) |
+
+VM step loop at `$3E:CDBF` (file `$7CDBF`):
+1. Load PC into `$1E/$1F`, swap R7 to `$63C0,X` via `JSR $D796`.
+2. `LDA ($1E),Y`; if opcode `>= $50` → wait (low nibble → `$6360,X`),
+   else dispatch via handler-pointer tables at `$CE31/$CE70` and
+   `JMP ($6038)`.
+
+Notable opcodes (handler addresses in bank `$3E`):
+
+| Op | Addr | Action |
+|---|---|---|
+| `$03` | `$CF40` | far CALL: read `[lo,hi,bank]`, push current PC+bank, jump to that script |
+| `$05`/`$06` | `$CFD2/$CFE2` | RETURN: pop bank+PC from call stack |
+| `$08` | `$D39E` | set 3-byte ref at `$627E/$6290/$62A2` |
+| `$0D` | `$D482` | generic set per-slot var (var_idx + value); var bases at `$D49D/$D4A7` table — 10 of them: `$61CA, $61DC, $61EE, $6200, $6212, $6224, $6236, $6248, $625A, $626C` |
+| `$15` | `$D518` | set anim-table pointer + frame (writes `$62D8,X / $62EA,X / $62FC,X`) |
+
+So the per-character init isn't a static table — every character's
+script *itself* writes the `$62D8/$62EA` (anim-table ptr), `$6182/$6194`
+(draw-routine ptr), etc. as side effects of running its bytecode.
+
+### Sprite CHR association
+
+There are 3 metasprite-blit variants — choice is per-character (via
+which routine the script wrote to `$6182,X/$6194,X`):
+
+| Routine | Behaviour |
+|---|---|
+| `$DA89` | Plain blit; metasprite = `[count][dx,dy,tile,attr]*N`. CHR comes from level-globals (R0=`$0042`, R1=`$0043`). Chunk `$1C` (Kirby) uses this. |
+| `$DDB3` | Reads byte 0 of metasprite as the **new R0** (sprite CHR low 2KB), then falls through to blit. |
+| `$DDE9` | Reads byte 0 of metasprite as the **new R1** (sprite CHR high 2KB), then falls through to blit. |
+
+Plus `$3D:AA52` is a one-off bulk CHR loader (R1..R4 from constants)
+likely used by a specific cutscene/boss.
+
+So most characters share the level's sprite CHR (so all the things on
+screen in stage 1 use stage 1's R0=`$80`/R1=`$9A`). When a character
+needs its own CHR, the `$DDB3`/`$DDE9` variants let each metasprite
+specify its first byte. Verified per-character draw-routine table at
+`$16:B9FD` (file `$2D9FD`) selected by `$62C7 / 2` — confirms the
+pattern.
+
+### PPU nametable upload buffer at `$74C8`
+
+The buffer at `$74C8..$75C7` is a PPU upload buffer (nametable tile
+stream). `$1F:C1CC: LDA ($16),Y / STA $2007 (PPUDATA) / INY / DEX /
+BNE $C1CC` reads from `$74C8` and pipes to PPU. The bytes
+(`$81/$82/$DA/$CF/...`) are PPU tile indices.
+
+The compressed source `$13:AE7A` (file `$26E8A`) holds PPU-stream
+content. The per-map 16-byte mini-header at `$13:AF2B + map*16` holds
+graphics-pipe parameters.
+
+Front-end loader at `$13:AE08`/`$13:AE15` picks the source, then
+`$13:AF9B` LZ-decompresses to `$74C8`. Helper `$13:B516` is the
+"decompress(src=A:X, dst=`$74C8`)" wrapper.
+
+### Enemy spawn routine — `$3E:CBA2`
+
+The high-volume spawn routine is **`$3E:CBA2`** — accounts for nearly
+all enemy spawns. It is invoked `JSR $CBA2` with:
+- `A` = spawn ID (an index into the 112-entry table in chunk `$18`)
+- `X` = X position
+- `Y` = Y position
+- `$602F`/`$6030` = slot-range bounds for the allocator
+- `$6023..$602F` = caller-set sprite state (already populated)
+
+```
+$CBA2  PHA / TYA PHA / TXA PHA        ; stash A, Y, X on stack
+       JSR $D622                       ; find_eligible_slot_in_range
+       BCC $CBB2                       ; ok -> alloc
+       PLA / PLA / PLA / A=$FF / RTS   ; fail
+$CBB2  JSR $D6EE                       ; alloc VM slot (Y = new slot)
+       (initialise per-slot draw routines $61xx, position arrays
+        $61CA-$6248 from $6023..$602A, draw fn = $DA89 etc.)
+       (continues at $CC11..$CC47)
+$CC47  PLA / JMP $CC63                 ; *** falls into $CCA7's
+                                       *** spawn-by-ID dispatcher
+$CC63  STA $6128,X                     ; the saved A = spawn_id
+       (bank-switch R7=$18; look up A0A7/A117/A187[A])
+       JSR $CCC4                       ; write PC/bank into new slot
+```
+
+`$CBA2` allocates and initialises a sprite slot and uses the 112-entry
+table at `$18:A0A7/A117/A187`. The full table is extracted to
+`docs/spawn_table.json`.
+
+`$3E:CC4B` (direct ID-only spawn, no sprite-init) is rarely used.
+
+**Allocator primitive `$3E:D6EE`** is the freelist pop. Caller mix:
+- `$CBA2` (in-game enemy/sprite spawn) — the dominant path
+- `$CCA7` (state-machine transitions for Kirby, etc.)
+- Bytecode opcode `$07` (`$3E:D35E`)
+- `$CC4B` (effectively unused)
+
+The enemy catalog — every static `JSR $CBA2` site with its resolved
+(spawn_id, target_pc, target_bank) — is in `docs/enemy_catalog.json`.
+28 sites; 20 resolve statically. The other 8 pass A in dynamically.
+
+Important: a "spawn ID" is NOT a per-character identity. Multiple
+sites can spawn the same ID (e.g. ID `$02` → `$16:$AA3A` is called
+from three different chunks). And the table only covers 16/112 IDs
+that are reached statically; the rest live in the table for use by
+boss-specific or scripted paths.
+
+### Bytecode VM opcode `$07` — spawn-child (rare)
+
+```
+$3E:D35E (op $07)
+   JSR $D6EE              ; alloc VM slot (Y = new index)
+   BCS skip
+   (link new slot into list)
+   read PC.lo/hi from script operand bytes 1, 2
+   bank inherits from parent's $63C0,Y
+$D391  A=$03 / JMP $CE13    ; PC += 3
+```
+
+Only 3 invocations in stage 1. Used for specialised child scripts that
+need to inherit the parent's PRG bank.
+
+### Per-chunk bytecode opcode handlers (open)
+
+The VM dispatcher in chunk `$3E` (`$CDBF`) handles common opcodes
+`$00..$3F`. But individual PRG chunks can hold their OWN script-VM
+opcode handlers that get invoked via the `JMP ($6038)` indirect inside
+`$3E:CE00` — when a script's PC sits in a chunk-specific bytecode and
+the operand bytes index into that chunk's local handler table.
+
+Example: chunk `$22` has at least one local spawn opcode at
+`$22:$AC5F`:
+```
+$22:$AC5F  LDY #1 / LDA ($1E),Y / PHA   ; arg1 from script = spawn_id
+$22:$AC64  INY    / LDA ($1E),Y / TAY   ; arg2 = Y_pos
+$22:$AC68  PLA                           ; A = spawn_id (back from stack)
+$22:$AC69  JSR $A612                     ; trampoline -> $CBA2 spawn
+$22:$AC6C  LDY #2 / JMP $8C9D            ; script PC += 2, resume VM
+```
+
+The trampoline at `$22:$A612` re-packs per-slot state ($6074..$60CE,X)
+into globals ($602B..$602E, $602F=$09, $6030=$12) that `$CBA2` reads.
+
+This explains the residual "stack-passed" `$CBA2` sites in the enemy
+catalog — each is the tail of a per-chunk bytecode spawn opcode, with
+the actual ID coming from the script's operand bytes (which the static
+catalog cannot resolve without simulating chunk-specific bytecode
+streams).
+
+### Spawn-ID dispatch ($3E:CC4B → tables in chunk $18)
+
+Two distinct VM-slot creation paths, both ending in `$3E:CCA7` (the
+"raw" VM-slot setup that writes per-slot PC/bank to `$6380,Y/$63A0,Y/
+$63C0,Y` and clears delay/callstack):
+
+**Main path — `$3E:CC4B(slot=X, spawn_id=A)`** (file `$7CC5B`):
+- bail if `$6128,X` already occupied
+- alloc new VM index via `$D6B9`/`$D6EE`, store at `$614C,X`
+- write spawn_id into `$6128,X`, copy to Y
+- save current R7 (`$49`), switch R7 to chunk `$18` via `$D796`
+- clear per-slot state arrays (`$60E0/$60F2/$6104/$6116/$625A/$626C/$62C6`)
+- look up the spawn ID in three parallel tables now mapped at `$A0xx`:
+
+| File offset | Table | What it holds |
+|---|---|---|
+| `$300B7` (`$18:A0A7`) | spawn_lo[id] | PC low byte |
+| `$30127` (`$18:A117`) | spawn_hi[id] | PC high byte |
+| `$30197` (`$18:A187`) | spawn_bank[id] | R7 chunk for the script |
+
+- `JSR $CCC4` (inner half of `CCA7`) writes those into the new VM slot
+- restore R7, RTS
+
+There are `$70` (112) entries — IDs 0 through 6F. Distribution by bank
+(see `docs/spawn_table.json` for the full table):
+
+| Bank | # IDs | Notes |
+|---|---|---|
+| `$24` | 21 | biggest — generic enemies |
+| `$25` | 13 | |
+| `$26` | 11 | |
+| `$28` | 8 | |
+| `$2D` | 8 | |
+| `$27` | 7 | |
+| `$29` | 7 | |
+| `$2C` | 6 | |
+| `$19` | 4 | spawn IDs 4, 5, 7, 6E (one is the `JMP $CC4B` hardcoded ID 6E) |
+| `$2A` | 4 | |
+| `$2B` | 4 | |
+| `$2F` | 3 | |
+| `$3D` | 3 | |
+| `$16`, `$23`, `$3B` | 2 each | |
+| `$14`, `$18`, `$2E`, `$34`, `$36`, `$38`, `$3C` | 1 each | |
+
+Verified caller: `$22:AE56` does `LDA #$6E / LDX #$01 / JMP $CC4B` —
+hardcoded particle/effect spawn for slot 1.
+
+**Alternate path — `$25:A135`** (file `$4A145`):
+Uses a separate small table at `$25:A15C/A164/A16C/A174` (8 entries
+each — looks like in-bank child characters: bosses or stage-specific
+variants). Same dispatch pattern, but lo/hi/bank fetched locally with
+`LDY $6200,X` as the index. Ends with `JMP $CCA7`.
+
+The bytes from the `$74C8` grid → dispatch-ID mapping is **not yet**
+extracted — the engine scans the grid as the camera scrolls into a new
+column. That column-scan routine is still open.
+
+### Bytecode VM dispatcher — `$3E:CDBF` fully RE'd
+
+Step loop:
+```
+$CDBF  set up zp pointer ($1E/$1F) to current PC, $20/$21 to per-slot
+       state base ($6400 + slot*$20)
+$CDDF  LDA ($1E),Y; CMP #$50; BCC $CE03 -> table dispatch
+   else (>= $50): high nibble = wait-subkind, low nibble = delay
+$CE03  TAX
+       LDA $CE31,X / LDA $CE70,X -> handler addr
+       JMP ($6038)
+$CE13  PC += A (advance for the handler); then if delay > 0 yield, else loop
+```
+
+Two handler tables in chunk `$3E`:
+- opcode handlers `$CE31` (lo) / `$CE70` (hi) — 64 entries (op `$00..$3F`)
+- wait-subkind handlers `$CEAF` (lo) / `$CEB8` (hi) — 16 entries
+
+Key opcode handlers (decoded, all in chunk `$3E`):
+
+| Op | Handler | Behaviour |
+|---|---|---|
+| `$03` | `$CF40` | **far JMP** — `[lo][hi][bank]`. Bank-switch, PC = (hi<<8)\|lo. (NOT a CALL; the slot's previous PC is gone.) |
+| `$18` | `$CF5F` | **near CALL** — `[lo][hi]`. Pushes return PC onto per-slot stack (`$6340,X`), then jumps. |
+| `$1A` | `$D522` | **set metasprite table** — `[lo][hi][bank]`. Writes anim table ptr+bank to `$62D8,X` (lo), `$62EA,X` (hi), `$62FC,X` (bank). |
+| `$1B` | `$D53C` | **set `$63E0,X`** — `[byte]` (some per-slot flag, used by `$15` skip). |
+| `$15` | `$D518` | **conditional-skip** if `$63E0,X != 0`. |
+| `>= $50` | wait — low nibble of opcode = delay frames, high nibble = wait variant (mostly sub `$08`/`$0D` in practice). |
+
+Spawn instructions: scripts can directly emit raw 6502 `JMP $CCA7` /
+`JSR $CCA7` (which only works inside fixed-bank-callable code, because
+`$3E:CCA7` is mapped at `$C000-$DFFF`). 281 such sites exist across
+the ROM — see `docs/spawn_census.json`.
+
+### Stage-entry path
+
+When the player enters stage 1, code at `$0A:A7E8` does `LDX #$00 /
+JMP $21:8CE8`. That routine indexes three parallel tables at
+`$21:8CFF` (lo) / `$21:8DEE` (hi) / `$21:8EDD` (bank) — file
+`$42D0F/$42DFE/$42EED` — 32 entries, ALL on bank `$14`. Entry 0 is
+`$14:A5AE`, Kirby's idle script. The 32-entry table is **Kirby's
+state machine** (idle / jump / inhale / etc.), not a stage spawn list.
+
+Enemies are not staged by any central list. They come into being via:
+- Scripts whose first instructions are `JMP $CCA7` patterns (each
+  character may spawn its own children — projectiles, sub-sprites).
+- The narrow `$3E:CC4B` ID-table path (only one verified caller).
+- Initial spawn of `slot $01` (Kirby) at stage entry.
+
+### Open questions
+
+- No static "stage N has enemies X, Y, Z" table exists. To answer that
+  you'd have to simulate scripts forward from each stage entry,
+  following bytecode opcodes `$03/$18` (control flow) and recording
+  every `JMP/JSR $CCA7` encountered.
+- The first WAIT-subkind handler `$D006` (sub `$00`) is unanalyzed.
+- Sprite CHR sub-banking — R0/R1 cover 4 KB but Kirby + enemies share
+  this; MMC3 IRQ might swap sprites mid-frame the same way it does for
+  the HUD/playfield BG split.
