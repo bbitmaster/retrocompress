@@ -1,4 +1,4 @@
-// diff_one.cpp - encode a single Kirby block with both compresch and optkirby,
+// diff_one.cpp - encode a single Kirby block with both compresch and retrocompress,
 // print each token decision side-by-side to find where compresch is leaving
 // bytes on the table.
 #include <cstdio>
@@ -82,14 +82,14 @@ int main(int argc, char** argv) {
     std::vector<u8> opt(Retrocompress::worst_compress_size(dsz));
     int opt_csz = Retrocompress::compress(dec.data(), dsz, opt.data());
 
-    printf("Block %d (file 0x%X): decompressed=%d  compresch=%d  optkirby=%d  saved=%+d\n\n",
+    printf("Block %d (file 0x%X): decompressed=%d  compresch=%d  retrocompress=%d  saved=%+d\n\n",
            idx, file_off, dsz, cs_csz, opt_csz, cs_csz - opt_csz);
 
     auto cs_toks = tokenize(cs.data(), cs_csz, dsz);
     auto opt_toks = tokenize(opt.data(), opt_csz, dsz);
 
     // Walk both token streams in lockstep at the dec-byte level
-    printf("%-6s | %-26s | %-26s\n", "dst", "compresch", "optkirby");
+    printf("%-6s | %-26s | %-26s\n", "dst", "compresch", "retrocompress");
     printf("-------+----------------------------+--------------------------\n");
     size_t ci = 0, oi = 0;
     int cs_pos = 0, opt_pos = 0;
@@ -126,6 +126,6 @@ int main(int argc, char** argv) {
         common_pos = (cs_end <= op_end) ? cs_pos : opt_pos;
         printf("%-6d | %-26s | %-26s\n", common_pos, cline, oline);
     }
-    printf("\nTotals (excl 0xFF terminator): compresch=%d  optkirby=%d\n", cs_bytes, opt_bytes);
+    printf("\nTotals (excl 0xFF terminator): compresch=%d  retrocompress=%d\n", cs_bytes, opt_bytes);
     return 0;
 }

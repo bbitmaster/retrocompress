@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
         printf("\n========== %s ==========\n", T.name);
         if (verbose)
             printf("%-4s %-9s %-8s %-8s %-8s %-9s %-9s %-9s\n",
-                   "idx", "file_off", "orig", "compresch", "optkirby", "decomp_sz", "opt_vs_orig", "opt_vs_cs");
+                   "idx", "file_off", "orig", "compresch", "retrocompress", "decomp_sz", "opt_vs_orig", "opt_vs_cs");
 
         for (int i = 0; i < T.n; ++i) {
             u8 b = rom[T.off_bank + i], h = rom[T.off_hi + i], l = rom[T.off_lo + i];
@@ -80,11 +80,11 @@ int main(int argc, char** argv) {
             std::vector<u8> cs(cs_worst + 16);
             int cs_csz = Compresch_Kirby::Compress(dec.data(), dsz, cs.data());
 
-            // optkirby encode
+            // retrocompress encode
             std::vector<u8> opt(Retrocompress::worst_compress_size(dsz));
             int opt_csz = Retrocompress::compress(dec.data(), dsz, opt.data());
 
-            // Verify optkirby roundtrip (via our own decompressor and via compresch's)
+            // Verify retrocompress roundtrip (via our own decompressor and via compresch's)
             std::vector<u8> rt(dsz + 64);
             int rt1 = Retrocompress::decompress(opt.data(), opt_csz, rt.data());
             bool ok1 = (rt1 == dsz) && (memcmp(rt.data(), dec.data(), dsz) == 0);
@@ -110,8 +110,8 @@ int main(int argc, char** argv) {
         printf("  decompressed:    %ld\n", t_dec);
         printf("  original csz:    %ld  (ratio %.3f)\n", t_orig, t_dec? (double)t_orig/t_dec:0.0);
         printf("  compresch:       %ld  (saved %ld vs original, %.2f%%)\n", t_cs, t_orig-t_cs, t_orig?100.0*(t_orig-t_cs)/t_orig:0.0);
-        printf("  optkirby:        %ld  (saved %ld vs original, %.2f%%)\n", t_opt, t_orig-t_opt, t_orig?100.0*(t_orig-t_opt)/t_orig:0.0);
-        printf("  optkirby vs cs:  %d beats / %d loses / %d ties, opt_worse_than_orig=%d\n",
+        printf("  retrocompress:        %ld  (saved %ld vs original, %.2f%%)\n", t_opt, t_orig-t_opt, t_orig?100.0*(t_orig-t_opt)/t_orig:0.0);
+        printf("  retrocompress vs cs:  %d beats / %d loses / %d ties, opt_worse_than_orig=%d\n",
                t_opt_beats_cs, t_cs_beats_opt, t_tie, t_opt_worse);
         g_orig+=t_orig; g_cs+=t_cs; g_opt+=t_opt; g_dec+=t_dec;
         g_valid+=t_valid; g_skip+=t_skip; g_rtfail+=t_rtfail;
@@ -125,9 +125,9 @@ int main(int argc, char** argv) {
     printf("  original csz:   %ld bytes (ratio %.3f)\n", g_orig, g_dec? (double)g_orig/g_dec:0.0);
     printf("  compresch:      %ld bytes (ratio %.3f, saved %ld = %.2f%%)\n",
            g_cs, g_dec? (double)g_cs/g_dec:0.0, g_orig-g_cs, g_orig?100.0*(g_orig-g_cs)/g_orig:0.0);
-    printf("  optkirby (DP):  %ld bytes (ratio %.3f, saved %ld = %.2f%%)\n",
+    printf("  retrocompress (DP):  %ld bytes (ratio %.3f, saved %ld = %.2f%%)\n",
            g_opt, g_dec? (double)g_opt/g_dec:0.0, g_orig-g_opt, g_orig?100.0*(g_orig-g_opt)/g_orig:0.0);
-    printf("  optkirby vs compresch: %d wins / %d losses / %d ties / opt_worse_than_orig=%d\n",
+    printf("  retrocompress vs compresch: %d wins / %d losses / %d ties / opt_worse_than_orig=%d\n",
            g_opt_beats_cs, g_cs_beats_opt, g_tie, g_opt_worse);
     return 0;
 }

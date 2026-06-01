@@ -1,4 +1,4 @@
-// Bench: compare encode speed of compresch vs optkirby across all documented blocks.
+// Bench: compare encode speed of compresch vs retrocompress across all documented blocks.
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     auto t1 = clk::now();
     double cs_ms = std::chrono::duration<double, std::milli>(t1 - t0).count() / iters;
 
-    // Time optkirby
+    // Time retrocompress
     auto t2 = clk::now();
     long opt_out = 0;
     for (int it = 0; it < iters; ++it) {
@@ -79,9 +79,9 @@ int main(int argc, char** argv) {
     printf("Iters: %d\n", iters);
     printf("compresch:  %.2f ms/run  (%.1f MB/s in, %ld bytes out)\n",
            cs_ms, total_in / (cs_ms * 1000.0), cs_out);
-    printf("optkirby:   %.2f ms/run  (%.1f MB/s in, %ld bytes out)\n",
+    printf("retrocompress:   %.2f ms/run  (%.1f MB/s in, %ld bytes out)\n",
            opt_ms, total_in / (opt_ms * 1000.0), opt_out);
-    printf("\nSpeedup: compresch is %.1fx %s than optkirby\n",
+    printf("\nSpeedup: compresch is %.1fx %s than retrocompress\n",
            opt_ms > cs_ms ? opt_ms / cs_ms : cs_ms / opt_ms,
            opt_ms > cs_ms ? "FASTER" : "SLOWER");
     return 0;

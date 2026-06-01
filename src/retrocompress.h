@@ -1,4 +1,5 @@
-// retrocompress.h - optimal Kirby-format encoder (DP shortest path).
+// retrocompress.h - optimal LZ encoder for the HAL/Nintendo "3-bit cmd + 5-bit
+// length" compression family (Kirby NES/SNES, SMW LC_LZ2, Super Metroid, etc.).
 #pragma once
 #include <cstdint>
 
@@ -6,16 +7,26 @@ namespace Retrocompress {
 
 using u8 = unsigned char;
 
+// Which dialect of the family to encode/decode.
+//
+//   KIRBY  : Kirby's Adventure (NES), Kirby Super Star (SNES). Supports inc-fill
+//            (cmd 3), plain backref (cmd 4), bit-reverse backref (cmd 5), and
+//            reverse-order backref (cmd 6).
+//   LZ2    : Super Mario World base ROM (a.k.a. Lunar Compress LC_LZ2). Same
+//            as Kirby minus the two alt-backref kinds.
+enum class Format { KIRBY, LZ2 };
+
 // Compress src[0..srclen-1] into dst, returning bytes written (incl 0xFF terminator).
 // dst must have room for at least worst_compress_size(srclen) bytes.
-int compress(const u8* src, int srclen, u8* dst);
+// fmt defaults to KIRBY so existing call sites keep working.
+int compress(const u8* src, int srclen, u8* dst, Format fmt = Format::KIRBY);
 
-// Conservative upper bound on output size.
+// Conservative upper bound on output size (same for every format in the family).
 int worst_compress_size(int srclen);
 
-// Standard Kirby-format decompressor with bounds checks. Returns decompressed
-// size on success, -1 on error. If dst is null, just returns the size.
-int decompress(const u8* src, int srclen, u8* dst);
+// Decompressor with bounds checks. Returns decompressed size on success,
+// -1 on error. If dst is null, just returns the size.
+int decompress(const u8* src, int srclen, u8* dst, Format fmt = Format::KIRBY);
 
 // Super Metroid format decompressor. Same 3-bit-cmd / 5-bit-len skeleton but
 // the LZ variants (4..7) have different semantics:
